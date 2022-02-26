@@ -1,0 +1,6 @@
+client/app/*
+!client/app/config.php
+data/*
+
+__pycache__/
+*.old
