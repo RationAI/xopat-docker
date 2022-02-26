@@ -1,6 +1,8 @@
 client/app/*
 !client/app/config.php
+
 data/*
+!data/.gitkeep
 
 __pycache__/
 *.old
