@@ -26,7 +26,7 @@ services:
     environment:
       PORT_NUMBER: 5000
       IP: 0.0.0.0
-      THREAD_COUNT: 2
+      THREAD_COUNT: 5
     depends_on:
       - server
 
@@ -36,6 +36,9 @@ services:
     restart: "no"
     ports:
       - "9000:9000"
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
     volumes:
       - ./data/:/server-data
     environment:

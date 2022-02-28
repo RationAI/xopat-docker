@@ -3,8 +3,8 @@ FROM php:8.0-apache
 WORKDIR /var/www/html
 COPY . .
 
-RUN apt-get update
-RUN apt-get install nano
+#RUN apt-get update
+#RUN apt-get install nano
 
 RUN chown -R www-data:www-data .
 

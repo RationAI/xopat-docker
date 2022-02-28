@@ -19,18 +19,18 @@ echo <<<EOF
 EOF;
 
 
-$annotation = ", {data: '/server-data/TP-2019_6785-12-1-annot.tif', shader: {name: 'Annotation Layer', type: 'edge', visible: 1, params: {color: {type: 'color', default: '#12fbff'}, threshold: {type: 'number', default: '1', visible: false}, opacity: {type: 'number', default: '1', visible: false}, edgeThickness: {type: 'range', default: '1', visible: true}}}}";
+$annotation = ", {data: 'TP-2019_6785-12-1-annot.tif', shader: {name: 'Annotation Layer', type: 'edge', visible: 1, params: {color: {type: 'color', default: '#12fbff'}, threshold: {type: 'number', default: '1', visible: false}, opacity: {type: 'number', default: '1', visible: false}, edgeThickness: {type: 'range', default: '1', visible: true}}}}";
 $probability = ""; //", {data: 'probability.tif', shader: {name: 'Probability Layer', type: 'heatmap', visible: 1, params: {color: {type: 'color', default: '#fff700'}, threshold: {type: 'range', default: '1', min: '1', max: '100', step: '1', helper: {type: 'number', default: '1', min: '1', max: '100', step: '1', alignment: '25'}}, opacity: {type: 'range', default: '1', min: '0', max: '1', step: '0.1'}}}}";
     
 
 echo <<<EOF
 
     <a style="cursor:pointer;" onclick="go(false,
-        'Title', '/server-data/TP-2019_6785-12-1.tif'
+        'Title', 'TP-2019_6785-12-1.tif'
         $annotation
         $probability
     );" oncontextmenu="go(true,
-        'Title', '/server-data/TP-2019_6785-12-1.tif'
+        'Title', 'TP-2019_6785-12-1.tif'
         $annotation
         $probability
     );"

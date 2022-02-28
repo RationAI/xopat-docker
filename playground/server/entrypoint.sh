@@ -1,2 +1,3 @@
 #!/bin/sh
-gunicorn "server:init_app()" --timeout 90 -w 2 --threads ${THREAD_COUNT} -b ${IP}:${PORT_NUMBER}
+echo "Gunicorn configuration: Threads ${THREAD_COUNT}. Listening: ${IP}:${PORT_NUMBER}"
+gunicorn "server:init_app()" --timeout 90 --workers ${THREAD_COUNT} -b ${IP}:${PORT_NUMBER}
