@@ -1,5 +1,13 @@
 # Docker composite of the visualization:
 
+All is configured for you so that you can run all the components: CLIENT, IMAGE SERVER
+
+ and PLAYGROUND inside docker.
+
+The problem is, you might have the need of configuration/changes of
+the files at runtime: see different branches for different setup scenarios!
+
+
 ### 1. Client 
 contains the visualization front-end - you probably want to run it inside docker.
 Client uses _reverse proxy_ to avoid CORS policy violation. You need to adjust
