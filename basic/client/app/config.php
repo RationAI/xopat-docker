@@ -1,7 +1,5 @@
 <?php
 
-$production = false;
-
 //relative path system in the application
 define('VISUALISATION_ROOT', dirname($_SERVER['SCRIPT_NAME'])); //note that this works only if the files that includes config is in the same directory
 define('EXTERNAL_SOURCES', 'external');
@@ -9,21 +7,13 @@ define('MODULES_FOLDER', 'modules');
 define('PLUGINS_FOLDER', 'plugins');
 define('OPEN_SEADRAGON', 'osd');
 
-if ($production) {
-    define('PROTOCOL', "https://");
-    define('SERVER', PROTOCOL . $_SERVER['HTTP_HOST']);
-    //auto domain: ($_SERVER['HTTP_HOST'] != 'localhost') ? $_SERVER['HTTP_HOST'] : false
-    define('JS_COOKIE_SETUP', "expires=Fri, 31 Dec 9999 23:59:59 GMT; SameSite=None; Secure=false; path=/");
+//important to set this right!
+define('PROTOCOL', "http://");
+define('SERVER', PROTOCOL . $_SERVER['HTTP_HOST']);
+define('JS_COOKIE_SETUP', "expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/");
+define('BG_TILE_SERVER', PROTOCOL . "localhost/iipsrv.fcgi");
+define('LAYERS_TILE_SERVER', PROTOCOL . "localhost/iipsrv.fcgi");
 
-    define('BG_TILE_SERVER', SERVER . "/iipsrv-martin/iipsrv.fcgi"); //server that can handle regular images
-    define('LAYERS_TILE_SERVER', SERVER . "/iipsrv-martin/iipsrv.fcgi"); //server that can handle image arrays
-} else {
-    define('PROTOCOL', "http://");
-    define('SERVER', PROTOCOL . $_SERVER['HTTP_HOST']);
-    define('JS_COOKIE_SETUP', "expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/");
-    define('BG_TILE_SERVER', PROTOCOL . "localhost/iipsrv.fcgi");
-    define('LAYERS_TILE_SERVER', PROTOCOL . "localhost/iipsrv.fcgi");
-}
 
 define('VISUALISATION_ROOT_ABS_PATH', SERVER . VISUALISATION_ROOT);
 define('EXTERNAL_SOURCES_ABS_PATH', VISUALISATION_ROOT_ABS_PATH . "/" . EXTERNAL_SOURCES);
@@ -56,4 +46,4 @@ define('COMMON_HEADERS', array());
  * Path/URL to a context page
  * (where user should be offered to go in case of failure)
  */
-define('GATEWAY', '../list-experiments.php');
+define('GATEWAY', '../index.php');
