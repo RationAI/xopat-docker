@@ -1,0 +1,32 @@
+version: '3.5'
+
+services:
+  client:
+    build:
+      context: ./client/
+    restart: "no"
+    ports:
+      - "80:80"
+    environment:
+      PORT_NUMBER: 80
+      IP: 127.0.0.1
+    depends_on:
+      - server
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+  server:
+    build:
+      context: ./server/
+    restart: "no"
+    ports:
+      - "9000:9000"
+    dns:
+      - 127.0.0.1
+      - 1.1.1.1
+    volumes:
+      - ./data/:/server-data
+    environment:
+      PORT_NUMBER: 9000
+      IP: 127.0.0.1

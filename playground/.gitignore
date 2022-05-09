@@ -1,8 +1,0 @@
-.vscode/
-imgs/
-*.ipynb
-__pycache__
-*.egg-info
-dist/
-.flaskenv
-build/
