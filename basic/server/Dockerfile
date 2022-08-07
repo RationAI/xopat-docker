@@ -19,6 +19,7 @@ RUN set -ex \
 #        libopenjp2-7 \
 #        libtiff5 \
         lighttpd \
+	libjsoncpp-dev \
     && mkdir -p /var/run/lighttpd \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
