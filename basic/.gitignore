@@ -1,6 +1,5 @@
-client/app/*
-!client/app/config.php
-!client/app/INSTRUCTIONS.md
+#The viewer, fetched from submodule
+client/pathopus/*
 
 data/*
 !data/.gitkeep

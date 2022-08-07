@@ -5,7 +5,7 @@ echo <<<EOF
 <head>
 <title>Visualisation gateway</title>
 
-<link rel="stylesheet" href="./app/external/primer_css.css">
+<link rel="stylesheet" href="./pathopus/external/primer_css.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 </head>
 
@@ -47,7 +47,7 @@ echo <<<EOF
 EOF;
 
 echo <<<EOF
-<form method="POST" action="./app/index.php"  id="redirect">
+<form method="POST" action="./pathopus/index.php"  id="redirect">
    <input type="hidden" name="visualisation" id="visualisation" value=''>
   
 </form>
@@ -98,7 +98,7 @@ function go(newTab, title, image, ...dataArray) {
 }
 
 function goCustom(title, image, ...dataArray) {
-    window.open("app/index.php?image=" + image + "&layer=" + dataArray.join(","), '_blank').focus();
+    window.open("pathopus/index.php?image=" + image + "&layer=" + dataArray.join(","), '_blank').focus();
 }
 
 </script>
