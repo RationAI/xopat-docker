@@ -1,5 +1,3 @@
-#The viewer, fetched from submodule
-client/pathopus/*
 
 data/*
 !data/.gitkeep

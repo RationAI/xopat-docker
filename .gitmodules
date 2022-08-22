@@ -1,5 +1,0 @@
-[submodule "basic/client/pathopus"]
-	path = basic/client/pathopus
-	url = https://github.com/RationAI/pathopus.git
-	branch = master
-
