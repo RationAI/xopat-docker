@@ -53,23 +53,6 @@ DO's
    or check the docker console) and the data you are trying to read is present in the `data` folder.
 
 
-##### Advanced: Custom Image Server & CORS
-Client uses _reverse proxy_ to avoid CORS policy violation. In order to receive
-data from custom image server, you have to add a record to the viewer server
-configuration: 
- - add reverse proxy record to `client/000-default.conf`, simply follow existing record example:
-   - choose a local URL and redirect the server to the desired image server if the request URL matches your local one
-   - configure viewer to send requests for images to your local chosen URL
- - don't forget to rebuild the viewer image 
-
-##### Custom servers
-Up to some point the viewer does not care what server or protocol is used to fetch image tiles.
-However, for multiple layers (data group) a synchronous image array requests must be possible. Either that or 
-the viewer cannot have more than one data layer. To our knowledge, no image server other than ours supports
-this feature. Using our solution is recommended, or contact us to learn how to adjust your image server
-to add support for multiple layers.
-
-
 ### Troubleshooting
 There might be various points of failure during the setup process. Most likely the problem lies in different tools versions or different OS setup.
 
@@ -98,4 +81,39 @@ to get ID's of your images (while running!) and enter image using
 > `docker exec -it bash`.
 Inspect the output of `/var/log/apache2/error.log` files to check any errors. Check the accessibility of other docker component using (for example from server): `curl -I http://client:8080/` or (from client) `curl -I http://server:9000/iipsrv.fcgi` - you should get HTTP 200 response.
 
-``
+
+### Advanced: modifications
+
+Modifying port numbers or component URLs unfortunately involves appropriate changes in many configuration files. Please, use some search utility for files to reflect your changes.
+Below, you will find hints and examples on several easier customizations you can perform.
+
+##### Changing Viewer Port Number - The Easy Way Out
+port mapping in `docker-compose.yml` has `XXXX:YYYY` format: you are mapping your machine port `XXXX` to the container's port `YYYY`. By default, the viewer runs on your machine localhost port 8080 which is mapped to container port 8080. If you want to access the front-end on `http://localhost/` you have to set port mapping for the client service to `80:8080`.
+    
+##### Changing Viewer Port Number Within The Container
+A nice example of how (as of now) changes to the default configuration are unfriendly. The viewer runs by default on 8080. In order to change this value, you have to:
+ - change the browser configuration - it has to know how to access the viewer, also the browser will change it's port it runs on
+ - change the viewer configuration - image (and other) server(s) are sent to localhost and redirected from there to different addresses. All URL's with localhost have to be adjusted, mainly plugins in their `include.json` file that cannot read the port number dynamically.
+ - change the client apache configuration: replace 8080 in `000-default.conf`
+ - change the docker compose specification: the client service has to publish correct ports
+    - for port mapping hint see the previous section
+ 
+##### Custom Image Server & CORS
+Client uses _reverse proxy_ to avoid CORS policy violation. In order to receive
+data from custom image server, you have to add a record to the viewer server
+configuration: 
+ - add reverse proxy record to `client/000-default.conf`, simply follow existing record example:
+   - choose a local URL and redirect the server to the desired image server if the request URL matches your local one
+   - configure viewer to send requests for images to your local chosen URL
+ - reverse proxy also makes changing image server URL easier - client still accesses it's localhost. But if you change also this value, don't forget to replace necessary links to the image server (the viewer and the browser configuration).
+ - don't forget to rebuild the viewer image 
+
+
+##### Custom Image Servers
+Up to some point the viewer does not care what server or protocol is used to fetch image tiles.
+However, for multiple layers (data group) a synchronous image array requests must be possible. Either that or 
+the viewer cannot have more than one data layer. To our knowledge, no image server other than ours supports
+this feature. Using our solution is recommended, or contact us to learn how to adjust your image server
+to add support for multiple layers.
+
+
