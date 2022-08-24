@@ -1,9 +1,4 @@
-client/app/*
-!client/app/config.php
-!client/app/INSTRUCTIONS.md
-
 data/*
 !data/.gitkeep
 
-__pycache__/
-*.old
+
