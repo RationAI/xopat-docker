@@ -58,7 +58,7 @@ There might be various points of failure during the setup process. Most likely t
 
 #### Fetching of the repository hierarchy (submodule) fails 
 Simply copy over manually downloaded version of that repository using
-`git clone <url>`. URL`s of all submodules can be found in the root directory in `/.gitmodules` file.
+`git clone <url>`. URL's of all submodules can be found in the root directory in `/.gitmodules` file.
 
 #### Node.js failures (npm install ...)
 Try the lates LTS version of Node.js. Try to delete `node_modules/` folder and run `npm install` again. OpenSeadragon might also take a while to download all dependencies, the testing library downloads the whole chromium engine. You can also try to build the OpenSeadragon library independently and place the built files inside `pathopus/openseadragon/build/openseadragon/` folder.

@@ -32,14 +32,16 @@ Basic docker composite that consists of the viewer image and the image-server im
 Other extensions (sibling folders to `basic`) can be attached to this docker setup - just copy over necessary files and adjust `docker-compose.yml`.
 For details on how to set-up the core, please refer to `basic/README.md`.
 
+```
 .
 +-- 
-+-- basic  _docker image of the viewer and an image server_
++-- basic    docker image of the viewer and an image server
 |   +-- client
-|       +-- *@pathopus*  the viewer
-|           +-- *@openseadragon*  the main viewer library proxy
-|       +-- *@browser*  simple PHP interface for data to the viewer  
+|       +-- @pathopus    the viewer
+|           +-- @openseadragon    the main viewer library proxy
+|       +-- @browser    simple PHP interface for data to the viewer  
 |   +-- data
 |   +-- server
-|       +-- *@iipimage*  default image server
-|   +-- docker-compose.yml  _basic compose rules_
+|       +-- @iipimage    default image server
+|   +-- docker-compose.yml    basic compose rules
+```
