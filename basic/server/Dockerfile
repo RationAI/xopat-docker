@@ -1,36 +1,26 @@
-#based on https://github.com/antage/docker-iipimage-server/blob/master/Dockerfile
+FROM ubuntu:20.04
+WORKDIR /usr/app/iipsrv
 
-FROM debian:stable
+COPY iipsrv /usr/app/iipsrv/
+COPY ports.conf /usr/app/
+COPY iipimage_conf.conf /usr/app/
+COPY create_tables.sql /usr/app/
+COPY iipimage_entrypoint.sh /usr/app/
 
-# Move scripts & conf files
-COPY ./iipsrv.fcgi /usr/lib/iipimage-server/iipsrv.fcgi
-# Set as executable
-RUN chmod 775 /usr/lib/iipimage-server/iipsrv.fcgi
+RUN chmod 644 /usr/app/create_tables.sql
+RUN chmod 755 /usr/app/iipimage_entrypoint.sh
 
-RUN set -ex \
-    && apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        libfcgi \
-        libgomp1 \
-        libpng16-16 \
-        libjpeg62-turbo \
-        libvips \ 
-#        libmemcached11 \
-#        libopenjp2-7 \
-#        libtiff5 \
-        lighttpd \
-	libjsoncpp-dev \
-    && mkdir -p /var/run/lighttpd \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-COPY ./lighttpd.conf /etc/lighttpd/lighttpd.conf
-
-CMD ["lighttpd", "-D", "-f", "/etc/lighttpd/lighttpd.conf"]
-
+ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt install -y g++ autoconf libtool pkg-config libjsoncpp-dev libvips-dev libpqxx-dev apache2 libapache2-mod-fcgid postgresql
+RUN ./autogen.sh
+RUN ./configure CXXFLAGS="$(pkg-config vips-cpp jsoncpp libpqxx --cflags)" LIBS="$(pkg-config vips-cpp jsoncpp libpqxx --libs)"
+RUN make
+RUN mkdir /var/www/localhost && mkdir /var/www/localhost/fcgi-bin
+RUN cp src/iipsrv.fcgi /var/www/localhost/fcgi-bin
+RUN cat /usr/app/iipimage_conf.conf >> /etc/apache2/apache2.conf
+RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf
+USER postgres
+RUN service postgresql start && psql -f ../create_tables.sql
+USER root
+ENTRYPOINT ["../iipimage_entrypoint.sh"]
 EXPOSE 9000
-
-RUN set -ex \
-    && ln -sfT /dev/stderr "/var/log/lighttpd/error.log" \
-    && ln -sfT /dev/stderr "/var/log/lighttpd/access.log" \
-    && ln -sfT /dev/stderr "/var/log/iipsrv.log"

@@ -5,36 +5,24 @@ inside a docker container.
 
 You can run the system as:
 
-`sudo docker-compose build && sudo docker-compose up`
+> `docker compose build && docker compose up`
 
-It is probably good idea to also read on system components below:
+if you have docker compose as a part of docker command (newer versions) or
+
+> `docker-compose build && docker-compose up`
+
+in case you have it installed as a detached program. But before you do, all components must be configured appropriately. Everything is ready and you just have to run some commands or copy files. In case of problems, read our Troubleshooting FAQ.
+
 
 ### 1. Client 
 contains the visualization front-end - you probably want to run it inside docker.
-The client code is fetched as a git submodule from _RationAI/pathopus_ repository.
-The client has to be configured for a localhost: thee correct VIEWER configuration, 
-`app/config.php` is provided. Simply copy over this file to the subodule and overwrite
-the existing configuration.
-
-##### CORS
-Client uses _reverse proxy_ to avoid CORS policy violation. In order to receive
-data from custom image server, you have to add a record to the viewer server
-configuration: 
- - add reverse proxy record to `client/000-default.conf`, simply follow existing record example:
-   - choose a local URL and redirect the server to the desired image server if the request URL matches your local one
-   - configure viewer to send requests for images to your local chosen URL
- - don't forget to rebuild the viewer image 
-
+The client has to be configured to be used inside docker over localhost: a valid `client/config/config.php` file is provided: simply copy over this file to the pathopus subodule and overwrite the existing configuration.
+The pathopus viewer depends on OpenSeadragon. Please, refer to `client/config/INSTRUCTIONS.md`.
+The browser ... todo
+ 
 ### 2. Server
-Contains the visualization image server - you probably want to run it inside docker, and 
-provide the data for it in the described folder below. 
+Contains the visualization image server - you probably want to run it inside docker, and provide the data for it in the described folder below. 
 
-##### Custom servers
-Up to some point the viewer does not care what server or protocol is used to fetch image tiles.
-However, for multiple layers (data group) a synchronous image array requests must be possible. Either that or 
-the viewer cannot have more than one data layer. To our knowledge, no image server other than ours supports
-this feature. Using our solution is recommended, or contact us to learn how to adjust your image server
-to add support for multiple layers.
 
 ### 3. Data
 Here you put all the data you want the server to see (and serve) - the images
@@ -48,9 +36,6 @@ The viewer renders the content into two logical groups:
  - **data group** - a collection of one or more images that are post-processed and shown atop each other; all of 
 them atop the **image** group
 
-For now, the configuration JSON must be sent manually in order
-to open the viewer. We are working on a simple file-browser-based context environment (information system). 
-
 ## On data: using our image server
 The only restrictions on data when using our image server are
  - data in pyramidal TIFFs
@@ -63,9 +48,54 @@ Do not be afraid to contact us if you want a custom behaviour.
 
 DO's
  - access the images in `data/` using relative path to this folder (e.g. in the JSON configuration)
- - create your own `client/index.php` version so that the viewer opens on your desired data
-    - or open `localhost/dev_setup.php` and input the configuration manually
- - start the docker using `docker-compose build && docker-compose up`
  - in case of problems (images not being served) verify that the IIPImage is really running
    (you can inspect the browser, network tab -> click on URL to see the response manually; 
-   or check the docker console)
+   or check the docker console) and the data you are trying to read is present in the `data` folder.
+
+
+##### Advanced: Custom Image Server & CORS
+Client uses _reverse proxy_ to avoid CORS policy violation. In order to receive
+data from custom image server, you have to add a record to the viewer server
+configuration: 
+ - add reverse proxy record to `client/000-default.conf`, simply follow existing record example:
+   - choose a local URL and redirect the server to the desired image server if the request URL matches your local one
+   - configure viewer to send requests for images to your local chosen URL
+ - don't forget to rebuild the viewer image 
+
+##### Custom servers
+Up to some point the viewer does not care what server or protocol is used to fetch image tiles.
+However, for multiple layers (data group) a synchronous image array requests must be possible. Either that or 
+the viewer cannot have more than one data layer. To our knowledge, no image server other than ours supports
+this feature. Using our solution is recommended, or contact us to learn how to adjust your image server
+to add support for multiple layers.
+
+
+### Troubleshooting
+There might be various points of failure during the setup process. Most likely the problem lies in different tools versions or different OS setup.
+
+#### Fetching of the repository hierarchy (submodule) fails 
+Simply copy over manually downloaded version of that repository using
+`git clone <url>`. URL`s of all submodules can be found in the root directory in `/.gitmodules` file.
+
+#### Node.js failures (npm install ...)
+Try the lates LTS version of Node.js. Try to delete `node_modules/` folder and run `npm install` again. OpenSeadragon might also take a while to download all dependencies, the testing library downloads the whole chromium engine. You can also try to build the OpenSeadragon library independently and place the built files inside `pathopus/openseadragon/build/openseadragon/` folder.
+
+#### Image server dies after `docker-compose up`
+Try to run the system again.
+
+#### General problems with docker images and networking
+In case of data loading problems (Image server seems to not to respond) please verify that:
+
+Both client and server apache are running.
+
+Open the viewer in Web Developer Tools and verify that there is no CORS violation policy issue (should not be the case, if so contact us).
+
+In case components cannot talk to each other, verify that the `config.php` file is correctly set up, `000-default.conf` file contains correct proxy redirects (client requests images on it`s localhost and these are redirected to the image server container).
+
+Advanced: enter both containers while running:
+> `docker ps -a`
+to get ID's of your images (while running!) and enter image using
+> `docker exec -it bash`.
+Inspect the output of `/var/log/apache2/error.log` files to check any errors. Check the accessibility of other docker component using (for example from server): `curl -I http://client:8080/` or (from client) `curl -I http://server:9000/iipsrv.fcgi` - you should get HTTP 200 response.
+
+``

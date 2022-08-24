@@ -1,6 +1,4 @@
-
 data/*
 !data/.gitkeep
 
-__pycache__/
-*.old
+
