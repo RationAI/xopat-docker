@@ -16,13 +16,17 @@ The following command stream supposes that you have git, npm, grunt, docker comp
 # setup configuration of browser and viewer for localhost
  cd ../../  
  cp config/pathopus/config.php pathopus/
- cp config/browser/index.php .
+ cp config/browser/config.php browser/
 # build and run docker - requires docker compose
  cd ../
  docker compose build
  docker compose up  
 ```
 This set of command should work for you on bash-like terminal, unless you encouter some (usually version based) problems. For more details, read below.
+
+When updating, simply use
+> ` git submodule update --recursive --remote`
+from the top repository and then possibly re-build all necessary components (e.g. OpenSeadragon) and copy over the configuration files.
 
 ## Understanding The Process
 

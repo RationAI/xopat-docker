@@ -67,7 +67,10 @@ $GLOBALS['exclude_folders'] = array(
     '.git'
 );
 
+//Default Image Server Preview URL Maker (for tif pyramid previews)
+$image_preview_url_maker = function ($file) {
+    return "http://localhost:8080/iipsrv.fcgi?Deepzoom={$file}_files/0/0_0.jpg";
+};
 
-// VIEWER CONF
-$dzi_image_server = "http://localhost:8080/iipsrv.fcgi";
+//Url of the Viewer
 $viewer_url = "http://localhost:8080/pathopus/index.php";
