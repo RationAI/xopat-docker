@@ -3,6 +3,29 @@
 All is configured for you so that you can run CLIENT and IMAGE SERVER
 inside a docker container. 
 
+
+## CtrlC CtrlV - The Way Of Legends
+
+The following command stream supposes that you have git, npm, grunt, docker compose installed. For details on OpenSeadragon building (grunt), see https://github.com/Aiosa/openseadragon/blob/master/CONTRIBUTING.md
+```
+# clone repositories - requires git
+ git clone https://github.com/RationAI/pathopus-docker.git
+ cd pathopus-docker && git submodule update --init --recursive
+# build openseadragon library - requires npm, grunt 
+ cd basic/client/pathopus/openseadragon && npm install
+# setup configuration of browser and viewer for localhost
+ cd ../../  
+ cp config/pathopus/config.php pathopus/
+ cp config/browser/index.php .
+# build and run docker - requires docker compose
+ cd ../
+ docker compose build
+ docker compose up  
+```
+This set of command should work for you on bash-like terminal, unless you encouter some (usually version based) problems. For more details, read below.
+
+## Understanding The Process
+
 You can run the system as:
 
 > `docker compose build && docker compose up`
