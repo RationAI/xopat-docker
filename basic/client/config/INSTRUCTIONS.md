@@ -2,9 +2,8 @@
 Replace `../pathopus/config.php` with  `./pathopus/config.php` for a localhost docker-ready configuration.
 
 ### The Browser configuration.
-Place `./browser/index.php` file anywhere where you want to access the front-end gateway (file manager). Moving it to `/basic/client` folder will make the localhost at (default 8080) port open it automatically.
-Adjust necessary variables within this file if you want to change the behaviour of the file manager.
-
+Place `./browser/config.php` file to the browser repository root. You can also adjust values in the configuration file to adjust the behavior. In case of changes of image server URL, note these have to be reverse-proxy defined in `000-default.conf` (see CORS issues explanation in the parent README).
+    
 ### The OpenSeadragon configuration.
 Either build the OpenSeadragon library: You will need Node.js installed. After you can use `npm` command, enter `pathopus/openseadragon` and run
 > `npm install -g grunt-cli`
@@ -20,4 +19,3 @@ You should include files:
  - `images/*.png` all the library icons
  
  
- ### The Browser configuration

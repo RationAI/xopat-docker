@@ -42,10 +42,10 @@ in case you have it installed as a detached program. But before you do, all comp
 
 
 ### 1. Client 
-contains the visualization front-end - you probably want to run it inside docker.
-The client has to be configured to be used inside docker over localhost: a valid `client/config/config.php` file is provided: simply copy over this file to the pathopus subodule and overwrite the existing configuration.
-The pathopus viewer depends on OpenSeadragon. Please, refer to `client/config/INSTRUCTIONS.md`.
-The browser ... todo
+contains the visualization front-end viewer Pathopus - you probably want to run it inside docker. A part of the front-end interface is the browser - a simple file manager for the viewer configuration.
+
+The pathopus viewer depends on OpenSeadragon. Both the viewer and the browser have their configuration files prepared: please, refer to `client/config/INSTRUCTIONS.md`.
+
  
 ### 2. Server
 Contains the visualization image server - you probably want to run it inside docker, and provide the data for it in the described folder below. 
