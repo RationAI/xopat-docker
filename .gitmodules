@@ -1,9 +1,0 @@
-[submodule "basic/client/pathopus"]
-	path = basic/client/pathopus
-	url = https://github.com/RationAI/pathopus.git
-[submodule "basic/server/iipsrv"]
-	path = basic/server/iipsrv
-	url = https://github.com/xkacenga/iipsrv.git
-[submodule "basic/client/browser"]
-	path = basic/client/browser
-	url = https://github.com/RationAI/browser
