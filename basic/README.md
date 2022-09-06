@@ -6,27 +6,26 @@ inside a docker container.
 
 ## CtrlC CtrlV - The Way Of Legends
 
-The following command stream supposes that you have git, npm, grunt, docker compose installed. For details on OpenSeadragon building (grunt), see https://github.com/Aiosa/openseadragon/blob/master/CONTRIBUTING.md
+The following command stream supposes that you have git and docker compose installed.
+
 ```
 # clone repositories - requires git
  git clone https://github.com/RationAI/pathopus-docker.git
- cd pathopus-docker && git submodule update --init --recursive
-# build openseadragon library - requires npm, grunt 
- cd basic/client/pathopus/openseadragon && npm install
-# setup configuration of browser and viewer for localhost
- cd ../../  
- cp config/pathopus/config.php pathopus/
- cp config/browser/config.php browser/
-# build and run docker - requires docker compose
- cd ../
+ cd pathopus-docker/basic
  docker compose build
  docker compose up  
 ```
-This set of command should work for you on bash-like terminal, unless you encouter some (usually version based) problems. For more details, read below.
+Before running the viewer (by default, the address is `http://localhost:8080`), put some [data](https://iipimage.sourceforge.io/documentation/images/)
+inside the `data` folder to view.
+
+
+If you have docker compose as a part of docker system, run `docker compose`. Otherwise, 
+`docker-compose` command will work. In case of permission issues, add `sudo` to run as administrator.
+This set of command should work for you on bash-like terminal. For more details, read below.
 
 When updating, simply use
-> ` git submodule update --recursive --remote`
-from the top repository and then possibly re-build all necessary components (e.g. OpenSeadragon) and copy over the configuration files.
+> `git pull && docker compose build --no-cache`
+from within the `basic` folder to force re-build all images.
 
 ## Understanding The Process
 
@@ -40,9 +39,10 @@ if you have docker compose as a part of docker command (newer versions) or
 
 in case you have it installed as a detached program. But before you do, all components must be configured appropriately. Everything is ready and you just have to run some commands or copy files. In case of problems, read our Troubleshooting FAQ.
 
+All components and necessary repositories are downloaded inside docker automatically.
 
 ### 1. Client 
-contains the visualization front-end viewer Pathopus - you probably want to run it inside docker. A part of the front-end interface is the browser - a simple file manager for the viewer configuration.
+contains the visualization front-end viewer Pathopus - you probably want to use a docker container to run it. A part of the front-end interface is the browser - a simple file manager for the viewer configuration.
 
 The pathopus viewer depends on OpenSeadragon. Both the viewer and the browser have their configuration files prepared: please, refer to `client/config/INSTRUCTIONS.md`.
 

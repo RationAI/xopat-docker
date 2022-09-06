@@ -42,8 +42,11 @@ $default_timezone = 'Europe/Prague'; // UTC
 // Root path for file manager
 $root_path = '/data/';
 
+// Root path for files (as image server receives them)
+$frontend_root_path = $root_path;
+
 // Root url for links in file manager.Relative to $http_host. Variants: '', 'path/to/subfolder'
-// Will not working if $root_path will be outside of server document root
+// Will not work if $root_path outside the server document root
 $root_url = ROOT_FOLDER;
 
 // Server hostname. Can set manually if wrong
