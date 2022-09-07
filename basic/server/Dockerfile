@@ -1,16 +1,25 @@
 FROM ubuntu:20.04
-WORKDIR /usr/app/iipsrv
-
-COPY iipsrv /usr/app/iipsrv/
-COPY ports.conf /usr/app/
-COPY iipimage_conf.conf /usr/app/
-COPY create_tables.sql /usr/app/
-COPY iipimage_entrypoint.sh /usr/app/
-
-RUN chmod 644 /usr/app/create_tables.sql
-RUN chmod 755 /usr/app/iipimage_entrypoint.sh
-
+WORKDIR /usr/app
 ARG DEBIAN_FRONTEND=noninteractive
+RUN apt update && apt install -y \
+        git \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        wget \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/xkacenga/iipsrv.git
+
+COPY ports.conf .
+COPY iipimage_conf.conf .
+COPY create_tables.sql .
+COPY iipimage_entrypoint.sh .
+
+RUN chmod 644 create_tables.sql
+RUN chmod 755 iipimage_entrypoint.sh
+
+WORKDIR /usr/app/iipsrv
 RUN apt update && apt install -y g++ autoconf libtool pkg-config libjsoncpp-dev libvips-dev libpqxx-dev apache2 libapache2-mod-fcgid postgresql
 RUN ./autogen.sh
 RUN ./configure CXXFLAGS="$(pkg-config vips-cpp jsoncpp libpqxx --cflags)" LIBS="$(pkg-config vips-cpp jsoncpp libpqxx --libs)"
