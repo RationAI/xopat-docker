@@ -1,7 +1,5 @@
 <?php
 
-define('ROOT_FOLDER', PATH_TO_IS_MANAGER);
-
 // Default language
 $lang = 'en';
 
@@ -46,8 +44,13 @@ $root_path = '/data/';
 $frontend_root_path = $root_path;
 
 // Root url for links in file manager.Relative to $http_host. Variants: '', 'path/to/subfolder'
-// Will not work if $root_path outside the server document root
-$root_url = ROOT_FOLDER;
+// Will not working if $root_path will be outside of server document root
+//if front end path and root path differ use a proxy link that will
+//translate one url to the other (e.g. using htaccess at SERVER/files) and
+//files directory with htaccess redirect from front end to root path
+$root_url = $root_path;
+
+$sources_url = PATH_TO_IS_MANAGER;
 
 // Server hostname. Can set manually if wrong
 $http_host = $_SERVER['HTTP_HOST'];
@@ -64,6 +67,10 @@ $upload_extensions = ''; // 'gif,png,jpg'
 // show or hide the left side tree view
 $show_tree_view = false;
 
+//Path to the SQlite tag database file
+$tag_store = "$root_url/tags.sqlite";
+//Path to the SQlite sessions db file
+$session_store = "$root_url/sessions.sqlite";
 
 //Array of folders excluded from listing
 $GLOBALS['exclude_folders'] = array(
@@ -76,4 +83,4 @@ $image_preview_url_maker = function ($file) {
 };
 
 //Url of the Viewer
-$viewer_url = "http://localhost:8080/pathopus/index.php";
+$viewer_url = "http://localhost:8080/xopat/index.php";

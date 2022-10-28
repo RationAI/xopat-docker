@@ -10,7 +10,10 @@ define('OPEN_SEADRAGON', 'osd');
 //important to set this right!
 define('PROTOCOL', "http://");
 define('SERVER', PROTOCOL . $_SERVER['HTTP_HOST']);
-define('JS_COOKIE_SETUP', "expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/");
+define('JS_COOKIE_EXPIRE', 365); //days
+define('JS_COOKIE_PATH', "/");
+define('JS_COOKIE_SAME_SITE', ""); //default
+define('JS_COOKIE_SECURE', ""); //default
 define('BG_TILE_SERVER', PROTOCOL . "localhost:8080/iipsrv.fcgi");
 define('LAYERS_TILE_SERVER', PROTOCOL . "localhost:8080/iipsrv.fcgi");
 

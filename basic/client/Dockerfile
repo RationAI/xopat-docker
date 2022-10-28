@@ -16,9 +16,9 @@ RUN git clone https://github.com/RationAI/browser.git
 COPY ./config/browser/config.php ./browser
 
 
-# Prepare Pathopus
-RUN git clone https://github.com/RationAI/pathopus.git
-WORKDIR /var/www/html/pathopus 
+# Prepare xOpat
+RUN git clone https://github.com/RationAI/xopat.git
+WORKDIR /var/www/html/xopat 
 RUN git clone https://github.com/RationAI/openseadragon.git 
 # https://stackoverflow.com/questions/25899912/how-to-install-nvm-in-docker
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh

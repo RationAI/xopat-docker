@@ -10,8 +10,8 @@ The following command stream supposes that you have git and docker compose insta
 
 ```
 # clone repositories - requires git
- git clone https://github.com/RationAI/pathopus-docker.git
- cd pathopus-docker/basic
+ git clone https://github.com/RationAI/xopat-docker.git
+ cd xopat-docker/basic
  docker compose build
  docker compose up  
 ```
@@ -42,9 +42,9 @@ in case you have it installed as a detached program. But before you do, all comp
 All components and necessary repositories are downloaded inside docker automatically.
 
 ### 1. Client 
-contains the visualization front-end viewer Pathopus - you probably want to use a docker container to run it. A part of the front-end interface is the browser - a simple file manager for the viewer configuration.
+contains the visualization front-end viewer xOpat - you probably want to use a docker container to run it. A part of the front-end interface is the browser - a simple file manager for the viewer configuration.
 
-The pathopus viewer depends on OpenSeadragon. Both the viewer and the browser have their configuration files prepared: please, refer to `client/config/INSTRUCTIONS.md`.
+The xOpat viewer depends on OpenSeadragon. Both the viewer and the browser have their configuration files prepared: please, refer to `client/config/INSTRUCTIONS.md`.
 
  
 ### 2. Server
@@ -88,7 +88,7 @@ Simply copy over manually downloaded version of that repository using
 `git clone <url>`. URL's of all submodules can be found in the root directory in `/.gitmodules` file.
 
 #### Node.js failures (npm install ...)
-Try the lates LTS version of Node.js. Try to delete `node_modules/` folder and run `npm install` again. OpenSeadragon might also take a while to download all dependencies, the testing library downloads the whole chromium engine. You can also try to build the OpenSeadragon library independently and place the built files inside `pathopus/openseadragon/build/openseadragon/` folder.
+Try the lates LTS version of Node.js. Try to delete `node_modules/` folder and run `npm install` again. OpenSeadragon might also take a while to download all dependencies, the testing library downloads the whole chromium engine. You can also try to build the OpenSeadragon library independently and place the built files inside `xopat/openseadragon/build/openseadragon/` folder.
 
 #### Image server dies after `docker-compose up`
 Try to run the system again.

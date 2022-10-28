@@ -1,4 +1,4 @@
-# Pathopus Docker
+# XOpat Docker
 
 You can find prepared docker-composite for various scenarios. The main idea is to be able to run individual components locally or connect them to various online service endpoints / REST API connectors. The basic docker image (compose) uses a basic scenario: local client and image server, other folders (will in future) advice on how to adjust `basic` setup to other use cases.
 
