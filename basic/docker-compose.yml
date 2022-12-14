@@ -15,7 +15,7 @@ services:
       - "host.docker.internal:host-gateway"
     depends_on:
       - server
-    
+
   server:
     container_name: server
     hostname: server

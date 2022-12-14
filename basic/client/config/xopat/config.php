@@ -1,22 +1,29 @@
 <?php
 
+
 //relative path system in the application
+define('PROJECT_ROOT', 'src');
 define('VISUALISATION_ROOT', dirname($_SERVER['SCRIPT_NAME'])); //note that this works only if the files that includes config is in the same directory
-define('EXTERNAL_SOURCES', 'external');
+define('EXTERNAL_SOURCES', PROJECT_ROOT . '/external');
+define('ASSETS_ROOT', PROJECT_ROOT . '/assets');
+define('LOCALES_ROOT', PROJECT_ROOT . '/locales');
+
+//todo two versions - dev and production
+define('OPENSEADRAGON_BUILD', './openseadragon/build/openseadragon/openseadragon.js');
+
 define('MODULES_FOLDER', 'modules');
 define('PLUGINS_FOLDER', 'plugins');
-define('OPEN_SEADRAGON', 'osd');
 
-//important to set this right!
 define('PROTOCOL', "http://");
 define('SERVER', PROTOCOL . $_SERVER['HTTP_HOST']);
 define('JS_COOKIE_EXPIRE', 365); //days
 define('JS_COOKIE_PATH', "/");
 define('JS_COOKIE_SAME_SITE', ""); //default
 define('JS_COOKIE_SECURE', ""); //default
+
+//note: you probably want to set up a reverse proxy for localhost rather than changing this (CORS)
 define('BG_TILE_SERVER', PROTOCOL . "localhost:8080/iipsrv.fcgi");
 define('LAYERS_TILE_SERVER', PROTOCOL . "localhost:8080/iipsrv.fcgi");
-
 
 define('VISUALISATION_ROOT_ABS_PATH', SERVER . VISUALISATION_ROOT);
 define('EXTERNAL_SOURCES_ABS_PATH', VISUALISATION_ROOT_ABS_PATH . "/" . EXTERNAL_SOURCES);
@@ -28,14 +35,16 @@ define('PLUGINS_ABS_PATH', VISUALISATION_ROOT_ABS_PATH . "/" . PLUGINS_FOLDER);
  * sources so that an update is enforced
  * with change
  */
-define('VERSION', "1.0.0");
+define('VERSION', "1.0.1");
 
 /**
- * Default protocol
+ * Default protocol = DZI
  * one-liner javascript expression with two available variables:
  *  - path: server URL
  *  - data: requested images ids/paths (comma-separated if multiple)
  *  - do not use " symbol as this is used to convert the value to string (or escape, e.g. \\")
+ *
+ * preview is an url creator for whole image preview fetching
  */
 define('BG_DEFAULT_PROTOCOL', '`${path}?Deepzoom=\${data}.dzi`');
 define('BG_DEFAULT_PROTOCOL_PREVIEW', '`${path}?Deepzoom=\${data}_files/0/0_0.jpg`');
