@@ -8,7 +8,7 @@ RUN apt update && apt install -y \
         curl \
         wget \
         dos2unix \
-    && rm -rf /var/lib/apt/lists/*
+        nano 
 
 RUN git clone https://github.com/xkacenga/iipsrv.git
 
@@ -16,13 +16,26 @@ COPY ports.conf .
 COPY iipimage_conf.conf .
 COPY create_tables.sql .
 COPY iipimage_entrypoint.sh /usr/local/bin/
+RUN touch /var/log/iipsrv.log && chmod 666 /var/log/iipsrv.log
 
 RUN chmod 644 create_tables.sql
 RUN chmod 755 /usr/local/bin/iipimage_entrypoint.sh
 RUN dos2unix /usr/local/bin/iipimage_entrypoint.sh
 
 WORKDIR /usr/app/iipsrv
-RUN apt update && apt install -y g++ autoconf libtool pkg-config libjsoncpp-dev libvips-dev libpqxx-dev apache2 libapache2-mod-fcgid postgresql --fix-missing
+RUN apt install -y g++ \ 
+        autoconf \
+        libtool \
+        pkg-config \
+        libjsoncpp-dev \
+        libvips-dev \
+        libpqxx-dev \
+        apache2 \
+        libapache2-mod-fcgid \
+        postgresql \
+        --fix-missing \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN ./autogen.sh
 RUN ./configure CXXFLAGS="$(pkg-config vips-cpp jsoncpp libpqxx --cflags)" LIBS="$(pkg-config vips-cpp jsoncpp libpqxx --libs)"
 RUN make
