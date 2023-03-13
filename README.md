@@ -18,6 +18,10 @@ windows OS to run the image server locally might not be the best idea since all 
 ### Basic
 Basic docker composite that consists of the viewer image and the image-server image running locally, talking to each other. Note that the viewer is not limited to the local server only, but some setup (regarding CORS and data mapping) must be made so that the client receives the image data succesfully. Please refer to `basic/README.md`.
 
+> Note: if you experience problems, make sure multistage docker files are built correctly with dependency deduction.
+> To enforce linear execution, before execution run linux: `DOCKER_BUILDKIT=0` windows: `set DOCKER_BUILDKIT=0`
+
+
 ```
 .
 +-- 
@@ -27,3 +31,9 @@ Basic docker composite that consists of the viewer image and the image-server im
 |   +-- server                image server and annotation database server in one
 |   +-- docker-compose.yml    basic docker compose network specification
 ```
+
+### Advanced
+SSH Tunelling to VS Code with running containers:
+ - install remote _ssh extension_ and _dev containers_ and make sure your OS has a ssh private key configured (`ssh-agent`)
+ - `docker context create xo_code --docker "host=ssh://username@localhost:8080"`
+ - `Ctrl+Shift+P` in VS Code and issue the _Attach to running container_ command

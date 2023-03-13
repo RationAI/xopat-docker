@@ -38,7 +38,7 @@ $toMailId = ""; //yourmailid@mail.com
 $default_timezone = 'Europe/Prague'; // UTC
 
 // Root path for file manager
-$root_path = '/data/';
+$root_path = '/var/www/data/';
 
 // Root path for files (as image server receives them)
 $frontend_root_path = $root_path;
@@ -79,7 +79,7 @@ $GLOBALS['exclude_folders'] = array(
 
 //Default Image Server Preview URL Maker (for tif pyramid previews)
 $image_preview_url_maker = function ($file) {
-    return "http://localhost:8080/iipsrv.fcgi?Deepzoom={$file}_files/0/0_0.jpg";
+    return "http://localhost:9000/iipsrv.fcgi?Deepzoom={$file}_files/0/0_0.jpg";
 };
 
 //Url of the Viewer

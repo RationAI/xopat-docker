@@ -1,0 +1,71 @@
+version: '3.5'
+
+services:
+  # Basic - viewer, image server and a browsing interface
+  basic:
+    image: viewer
+    container_name: viewer
+    hostname: viewer
+    build:
+      context: ./templates/basic/
+      target: viewer
+    environment:
+      XO_DB_DRIVER: pgsql
+      XO_DB_HOST: browser_db
+      XO_DB_PORT: 5432
+      XO_DB_USER: postgres
+      XO_DB_PASS: 123456789
+      XO_DB_NAME: postgresDB
+    restart: always
+    volumes:
+      - ./data/:/var/www/data/:rwx
+      - ../browser/:/var/www/html/tbrowser/
+    ports:
+      - "8080:8080"
+      - "9000:9000"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - browser_db
+
+  mirax_importer:
+    image: mirax_importer
+    container_name: mirax_importer
+    hostname: mirax_importer
+    build:
+      context: ./templates/mirax-importer/
+    environment:
+      XO_DB_DRIVER: pgsql
+      XO_DB_HOST: browser_db
+      XO_DB_PORT: 5432
+      XO_DB_USER: postgres
+      XO_DB_PASS: 123456789
+      XO_DB_NAME: postgresDB
+    restart: always
+    volumes:
+      - ./data/:/var/www/data/:rwx
+      - ../importer/:/var/www/html/timporter/
+    ports:
+      - "8081:8081"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      - browser_db
+
+  # Postgres service for the browsing system metadata
+  browser_db:
+    image: postgres:14.1-alpine
+    container_name: browser_db
+    hostname: browser_db
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456789
+    ports:
+      - '5432:5432'
+    volumes: 
+      - ./data/.db/:/var/lib/postgresql/data/
+      - ./templates/basic/client/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+
+
+
