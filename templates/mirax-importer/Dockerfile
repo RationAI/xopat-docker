@@ -43,7 +43,7 @@ RUN phpenmod pdo_pgsql \
     && mkdir /var/www/html/xo_db && git clone $DB_PROXY /var/www/html/xo_db \
     && mkdir -p /var/www/data \
     && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /var/www/data \
-    && chmod --recursive 777 /var/run /var/www/data 
+    && chmod --recursive 777 /var/run /var/www/data /var/www/html/importer/server
 
 EXPOSE 8081
 CMD ["system","apache2","reload"]
