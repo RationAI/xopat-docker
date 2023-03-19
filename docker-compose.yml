@@ -19,7 +19,6 @@ services:
     restart: always
     volumes:
       - ./data/:/var/www/data/:rwx
-      - ../browser/:/var/www/html/tbrowser/
     ports:
       - "8080:8080"
       - "9000:9000"
@@ -44,7 +43,6 @@ services:
     restart: always
     volumes:
       - ./data/:/var/www/data/:rwx
-      - ../importer/:/var/www/html/timporter/
     ports:
       - "8081:8081"
     extra_hosts:
@@ -64,7 +62,7 @@ services:
     ports:
       - '5432:5432'
     volumes: 
-      - ./data/.db/:/var/lib/postgresql/data/
+      - .db/:/var/lib/postgresql/data/
       - ./templates/basic/client/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
 
 

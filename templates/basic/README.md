@@ -3,30 +3,6 @@
 All is configured for you so that you can run CLIENT and IMAGE SERVER
 inside a docker container. 
 
-
-## CtrlC CtrlV - The Way Of Legends
-
-The following command stream supposes that you have git and docker compose installed.
-
-```
-# clone repositories - requires git
- git clone https://github.com/RationAI/xopat-docker.git
- cd xopat-docker/basic
- docker compose build
- docker compose up  
-```
-Before running the viewer (by default, the address is `http://localhost:8080`), put some [data](https://iipimage.sourceforge.io/documentation/images/)
-inside the `data` folder to view.
-
-
-If you have docker compose as a part of docker system, run `docker compose`. Otherwise, 
-`docker-compose` command will work. In case of permission issues, add `sudo` to run as administrator.
-This set of command should work for you on bash-like terminal. For more details, read below.
-
-When updating, simply use
-> `git pull && docker compose build --no-cache`
-from within the `basic` folder to force re-build all images.
-
 ## Understanding The Process
 
 You can run the system as:

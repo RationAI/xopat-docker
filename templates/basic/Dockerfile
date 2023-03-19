@@ -102,6 +102,7 @@ RUN apt-get update -y && apt-get install -y \
         libtiff-dev \
         libjpeg-dev \
         libvips \
+        memcached \
 
         --fix-missing \
     && apt clean \
@@ -143,6 +144,7 @@ COPY --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/xopat/open
 COPY --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/xopat/openseadragon/build/openseadragon/
 
 EXPOSE 8080-9000
+CMD ["systemctl", "start", "memcached"]
 CMD ["system","apache2","reload"]
 CMD ["apache2ctl","-D","FOREGROUND"]
 USER www-data

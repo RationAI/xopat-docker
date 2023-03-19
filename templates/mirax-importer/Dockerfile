@@ -12,6 +12,7 @@ RUN apt-get update -y && apt-get install -y \
         ca-certificates \
         curl \
         wget \
+        libvips-tools \
         # HTTP Server
         apache2 \
         # PHP Apps

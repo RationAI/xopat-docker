@@ -1,36 +1,41 @@
 # XOpat Docker
 
-You can find prepared docker-composite for various scenarios. The main idea is to be able to run individual components locally or connect them to various online service endpoints / REST API connectors. The basic docker image (compose) uses a basic scenario: local client and image server, other folders (will in future) advice on how to adjust `basic` setup to other use cases.
+You can find prepared docker-composite for various scenarios. The main idea is to be able to run individual components locally or connect them to various online service endpoints / REST API connectors. The basic docker image (compose) uses a basic scenario: local client and image server, other folders add other containers 
+with abilities to the system.
 
 ### Requirements
 For the viewer to be able to run, `docker-compose` is necessary.
 Please refer to **https://docs.docker.com/compose/
 
 ## Fetching the repositories and understanding the structure
-To run the basic scenario, please refer to `basic/README.md`. For extensions, refer to  `[extension]/README.md` first if you wish to use it.
+To run the basic scenario, please refer to `templates/basic/README.md`. For extensions, refer to  `templates/[extension]/README.md` first if you wish to use it.
 
+## CtrlC CtrlV - The Way Of Legends
 
-##### Warning
-_Note that windows docker cannot use shared drive and therefore the data has to be copied over to the image. Using
-windows OS to run the image server locally might not be the best idea since all the heavy data has to be duplicated._
-
-
-### Basic
-Basic docker composite that consists of the viewer image and the image-server image running locally, talking to each other. Note that the viewer is not limited to the local server only, but some setup (regarding CORS and data mapping) must be made so that the client receives the image data succesfully. Please refer to `basic/README.md`.
-
-> Note: if you experience problems, make sure multistage docker files are built correctly with dependency deduction.
-> To enforce linear execution, before execution run linux: `DOCKER_BUILDKIT=0` windows: `set DOCKER_BUILDKIT=0`
-
+The following command stream supposes that you have git and docker compose installed.
 
 ```
-.
-+-- 
-+-- basic                     docker image of the viewer and an image server
-|   +-- client                front-end: the viewer and file browser
-|   +-- data                  the viewer can show any pyramidal tiff stored in this directory
-|   +-- server                image server and annotation database server in one
-|   +-- docker-compose.yml    basic docker compose network specification
+# clone repositories - requires git
+ git clone https://github.com/RationAI/xopat-docker.git && cd xopat-docker
+ docker compose build
+ docker compose up  
 ```
+Before running the viewer (by default, the address is `http://localhost:8080`), put some [data](https://iipimage.sourceforge.io/documentation/images/)
+inside the `./data/` folder to view. Note that some elements might require write rights to this folder, so before running the system you
+can run `mkdir data && chmod a+rwx data`. Based on your scenarios you can adjust the rights, but you should make sure `www-data` user inside
+the docker can read (and possibly write to) this directory. It is always mounted as `/var/www/data/` inside docker.
+
+
+If you have docker compose as a part of docker system, run `docker compose`. Otherwise, 
+`docker-compose` command will work.
+
+When updating, simply use
+> `git pull && docker compose build`
+
+## Entering containers
+Containers are named, so in order to execute a code inside the container you can use its name. For the
+basic container the name is `viewer`. Entering its shell can thus be done as:
+> docker exec -it viewer bash
 
 ### Advanced
 SSH Tunelling to VS Code with running containers:
