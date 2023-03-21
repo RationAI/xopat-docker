@@ -130,7 +130,9 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     && chmod a+x /var/www/localhost/fcgi-bin/iipsrv.fcgi \
     # Client
     && mkdir /var/www/html/browser && git clone $BROWSER /var/www/html/browser \
-    && mkdir /var/www/html/xopat && git clone $VIEWER /var/www/html/xopat \
+    && mkdir /var/www/html/xopat && git clone  $VIEWER /var/www/html/xopat \
+    # for dev branch: 
+    # && cd /var/www/html/xopat && git checkout development && cd /usr/app \
     && mkdir /var/www/html/xo_db && git clone $DB_PROXY /var/www/html/xo_db \
     && mkdir -p /var/www/html/xopat/openseadragon/build/openseadragon \
     && mkdir -p /var/www/data \
