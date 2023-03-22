@@ -87,6 +87,7 @@ RUN apt-get update -y && apt-get install -y \
         ca-certificates \
         curl \
         wget \
+        s6 \
         # HTTP Server
         apache2 \
         # PHP Apps
@@ -117,6 +118,7 @@ COPY server/apache.conf server-apache.conf
 COPY client/apache.conf /etc/apache2/sites-available/000-default.conf
 COPY --from=build /usr/app/server/src/iipsrv.fcgi /var/www/localhost/fcgi-bin/
 COPY client/index.php /var/www/html/index.php
+COPY /s6 /run/s6
 
     # General
 RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
@@ -146,7 +148,6 @@ COPY --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/xopat/open
 COPY --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/xopat/openseadragon/build/openseadragon/
 
 EXPOSE 8080-9000
-CMD ["systemctl", "start", "memcached"]
-CMD ["system","apache2","reload"]
-CMD ["apache2ctl","-D","FOREGROUND"]
 USER www-data
+ENTRYPOINT ["/usr/bin/s6-svscan","/run/s6"]
+CMD []
