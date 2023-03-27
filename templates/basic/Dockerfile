@@ -127,7 +127,7 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     #For reverse proxy, enable
     # && a2enmod proxy proxy_http \
     #Auth: if user not set   #just create some file so apache is happy, will not be used              #or make desired auth
-    && a2enmod env && mkdir -p /usr/local/etc/apache/ && touch /etc/apache2/.env.apache \
+    && a2enmod env dir rewrite && mkdir -p /usr/local/etc/apache/ && touch /etc/apache2/.env.apache \
     && [ -z $XO_BASIC_USER ] && (htpasswd -bc /usr/local/etc/apache/.htpasswd 'www-data' '123456789') || (htpasswd -bc /usr/local/etc/apache/.htpasswd $XO_BASIC_USER "$XO_BASIC_PWD" && echo "SetEnv XO_BASIC_AUTH 5" >> /etc/apache2/.env.apache) \
 
     #IIPServer
@@ -149,7 +149,8 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
  
 # Overwrites / extends on files cloned, needs to run after git clone
 COPY client/browser/config.php /var/www/html/browser/config.php
-COPY client/browser/index.php /var/www/html/index.php
+COPY index.php /var/www/html/index.php
+COPY .htaccess /var/www/html/.htaccess
 COPY client/xopat/env.json /var/www/html/xopat/env/env.json
 COPY client/xo_config.php /var/www/html/xo_db/config.php
 COPY --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/xopat/openseadragon/build/openseadragon/

@@ -51,7 +51,7 @@ defined('FM_ADVANCED_MODE') || define('FM_ADVANCED_MODE', false);
 defined('FM_HTTP_PATH') || define('FM_HTTP_PATH', FM_BROWSE_ROOT);
 
 // Root url for the source files, by default relative, the domain is appended automatically (JS, assets)
-defined('FM_URL') || define('FM_URL', PATH_TO_IS_MANAGER || '');
+defined('FM_URL') || define('FM_URL', PATH_TO_IS_MANAGER ?? '');
 
 // URL path enabling direct access to files, the server can define access to the folder at given prefix
 defined('FM_DIRECT_FILES_URL') || define('FM_DIRECT_FILES_URL', '/data/');
