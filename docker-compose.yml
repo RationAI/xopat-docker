@@ -9,6 +9,10 @@ services:
     build:
       context: ./templates/basic/
       target: viewer
+      #deliver basic auth in build phase, removed by default
+      #args:
+        # XO_BASIC_USER: admin
+        # XO_BASIC_PWD: 123456
     environment:
       XO_DB_DRIVER: pgsql
       XO_DB_HOST: browser_db
@@ -33,6 +37,10 @@ services:
     hostname: mirax_importer
     build:
       context: ./templates/mirax-importer/
+      #deliver basic auth in build phase, enabled by default: CRUD access
+      args:
+        XO_BASIC_USER: admin
+        XO_BASIC_PWD: 123456
     environment:
       XO_DB_DRIVER: pgsql
       XO_DB_HOST: browser_db
@@ -64,6 +72,3 @@ services:
     volumes: 
       - .db/:/var/lib/postgresql/data/
       - ./templates/basic/client/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
-
-
-

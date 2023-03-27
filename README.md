@@ -32,6 +32,9 @@ If you have docker compose as a part of docker system, run `docker compose`. Oth
 When updating, simply use
 > `git pull && docker compose build`
 
+## Configuring the build
+You can adjust some values - passwords, access - through environmental variables in the docker compose file.
+
 ## Entering containers
 Containers are named, so in order to execute a code inside the container you can use its name. For the
 basic container the name is `viewer`. Entering its shell can thus be done as:

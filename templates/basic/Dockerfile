@@ -111,39 +111,47 @@ RUN apt-get update -y && apt-get install -y \
     && a2enmod rewrite headers expires ext_filter
 
 WORKDIR /usr/app
+# Did not work unless we forward arg from compose.yml to env
+ARG XO_BASIC_PWD
+ARG XO_BASIC_USER
 
 # Server-related files that are better to copy before changing access rights etc.
 COPY ports.conf .
-COPY server/apache.conf server-apache.conf
-COPY client/apache.conf /etc/apache2/sites-available/000-default.conf
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
 COPY --from=build /usr/app/server/src/iipsrv.fcgi /var/www/localhost/fcgi-bin/
-COPY client/index.php /var/www/html/index.php
 COPY /s6 /run/s6
 
     # General
 RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     && phpenmod pdo_pgsql \
-    && a2enmod proxy && a2enmod proxy_http \
-    # IIPServer
+    #For reverse proxy, enable
+    # && a2enmod proxy proxy_http \
+    #Auth: if user not set   #just create some file so apache is happy, will not be used              #or make desired auth
+    && a2enmod env && mkdir -p /usr/local/etc/apache/ && touch /etc/apache2/.env.apache \
+    && [ -z $XO_BASIC_USER ] && (htpasswd -bc /usr/local/etc/apache/.htpasswd 'www-data' '123456789') || (htpasswd -bc /usr/local/etc/apache/.htpasswd $XO_BASIC_USER "$XO_BASIC_PWD" && echo "SetEnv XO_BASIC_AUTH 5" >> /etc/apache2/.env.apache) \
+
+    #IIPServer
     && touch /var/log/iipsrv.log \
     && chmod 666 /var/log/iipsrv.log \
-    && cat /usr/app/server-apache.conf >> /etc/apache2/sites-available/000-default.conf \
     && chown www-data:www-data /var/www/localhost/fcgi-bin/iipsrv.fcgi \
     && chmod a+x /var/www/localhost/fcgi-bin/iipsrv.fcgi \
-    # Client
-    && mkdir /var/www/html/browser && git clone $BROWSER /var/www/html/browser \
+
+    #Client
+    && mkdir /var/www/html/browser && git clone  $BROWSER /var/www/html/browser \
     && mkdir /var/www/html/xopat && git clone  $VIEWER /var/www/html/xopat \
-    # for dev branch: 
-    # && cd /var/www/html/xopat && git checkout development && cd /usr/app \
-    && mkdir /var/www/html/xo_db && git clone $DB_PROXY /var/www/html/xo_db \
+    #for dev branch: 
+    && cd /var/www/html/xopat && git checkout development && cd /usr/app \
+    && mkdir /var/www/html/xo_db && git clone  $DB_PROXY /var/www/html/xo_db \
     && mkdir -p /var/www/html/xopat/openseadragon/build/openseadragon \
     && mkdir -p /var/www/data \
     && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /var/www/data \
     && chmod --recursive 777 /var/run /var/www/data 
-
+ 
 # Overwrites / extends on files cloned, needs to run after git clone
 COPY client/browser/config.php /var/www/html/browser/config.php
+COPY client/browser/index.php /var/www/html/index.php
 COPY client/xopat/env.json /var/www/html/xopat/env/env.json
+COPY client/xo_config.php /var/www/html/xo_db/config.php
 COPY --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/xopat/openseadragon/build/openseadragon/
 COPY --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/xopat/openseadragon/build/openseadragon/
 

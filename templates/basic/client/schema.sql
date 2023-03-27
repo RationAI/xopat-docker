@@ -5,7 +5,7 @@
 -- Dumped from database version 14.1
 -- Dumped by pg_dump version 15.2
 
--- Started on 2023-03-21 20:30:54
+-- Started on 2023-03-25 16:23:03
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -19,7 +19,7 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- TOC entry 3388 (class 1262 OID 16384)
+-- TOC entry 3390 (class 1262 OID 16384)
 -- Name: postgresDB; Type: DATABASE; Schema: -; Owner: postgres
 --
 
@@ -61,8 +61,8 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.access (
-                               user_id integer NOT NULL,
-                               root character varying(255) NOT NULL
+    user_id integer NOT NULL,
+    root character varying(255) NOT NULL
 );
 
 
@@ -74,10 +74,10 @@ ALTER TABLE public.access OWNER TO postgres;
 --
 
 CREATE TABLE public.auth (
-                             user_id integer NOT NULL,
-                             type character varying(63) NOT NULL,
-                             type_id character varying(63) NOT NULL,
-                             secret character varying(255)
+    user_id integer NOT NULL,
+    type character varying(63) NOT NULL,
+    type_id character varying(63) NOT NULL,
+    secret character varying(255)
 );
 
 
@@ -89,10 +89,10 @@ ALTER TABLE public.auth OWNER TO postgres;
 --
 
 CREATE TABLE public.file_events (
-                                    file_id integer NOT NULL,
-                                    event character varying(63),
-                                    data text,
-                                    tstamp timestamp without time zone
+    file_id integer NOT NULL,
+    event character varying(63),
+    data text,
+    tstamp timestamp without time zone
 );
 
 
@@ -104,19 +104,19 @@ ALTER TABLE public.file_events OWNER TO postgres;
 --
 
 CREATE TABLE public.files (
-                              id integer NOT NULL,
-                              name character varying(255) NOT NULL,
-                              created timestamp without time zone,
-                              status character varying(31),
-                              root character varying(255),
-                              biopsy character varying(32)
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    created timestamp without time zone,
+    status character varying(31),
+    root character varying(255),
+    biopsy character varying(32)
 );
 
 
 ALTER TABLE public.files OWNER TO postgres;
 
 --
--- TOC entry 3390 (class 0 OID 0)
+-- TOC entry 3392 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN files.status; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -125,7 +125,7 @@ COMMENT ON COLUMN public.files.status IS 'File processing status. ''uploaded'', 
 
 
 --
--- TOC entry 3391 (class 0 OID 0)
+-- TOC entry 3393 (class 0 OID 0)
 -- Dependencies: 212
 -- Name: COLUMN files.root; Type: COMMENT; Schema: public; Owner: postgres
 --
@@ -150,7 +150,7 @@ CREATE SEQUENCE public.file_id_seq
 ALTER TABLE public.file_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3392 (class 0 OID 0)
+-- TOC entry 3394 (class 0 OID 0)
 -- Dependencies: 213
 -- Name: file_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -164,8 +164,8 @@ ALTER SEQUENCE public.file_id_seq OWNED BY public.files.id;
 --
 
 CREATE TABLE public.seen_files (
-                                   user_id integer NOT NULL,
-                                   file_id integer NOT NULL
+    user_id integer NOT NULL,
+    file_id integer NOT NULL
 );
 
 
@@ -177,10 +177,10 @@ ALTER TABLE public.seen_files OWNER TO postgres;
 --
 
 CREATE TABLE public.users (
-                              id integer NOT NULL,
-                              name character varying(63) NOT NULL,
-                              email character varying(255),
-                              created timestamp with time zone
+    id integer NOT NULL,
+    name character varying(63) NOT NULL,
+    email character varying(255),
+    created timestamp with time zone
 );
 
 
@@ -203,7 +203,7 @@ CREATE SEQUENCE public.users_id_seq
 ALTER TABLE public.users_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3393 (class 0 OID 0)
+-- TOC entry 3395 (class 0 OID 0)
 -- Dependencies: 216
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -217,12 +217,12 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 --
 
 CREATE TABLE public.xopat_annotation_data (
-                                              id integer NOT NULL,
-                                              annotation_id integer NOT NULL,
-                                              tstamp timestamp without time zone NOT NULL,
-                                              data text,
-                                              format character varying(16),
-                                              version character varying(16)
+    id integer NOT NULL,
+    annotation_id integer NOT NULL,
+    tstamp timestamp without time zone NOT NULL,
+    data text,
+    format character varying(16),
+    version character varying(16)
 );
 
 
@@ -245,7 +245,7 @@ CREATE SEQUENCE public.xopat_annotation_data_id_seq
 ALTER TABLE public.xopat_annotation_data_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3394 (class 0 OID 0)
+-- TOC entry 3396 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: xopat_annotation_data_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -259,10 +259,10 @@ ALTER SEQUENCE public.xopat_annotation_data_id_seq OWNED BY public.xopat_annotat
 --
 
 CREATE TABLE public.xopat_annotations (
-                                          id integer NOT NULL,
-                                          author_user_id integer,
-                                          file_id integer NOT NULL,
-                                          metadata text
+    id integer NOT NULL,
+    author_user_id integer,
+    file_id integer NOT NULL,
+    metadata text
 );
 
 
@@ -285,7 +285,7 @@ CREATE SEQUENCE public.xopat_annotations_id_seq
 ALTER TABLE public.xopat_annotations_id_seq OWNER TO postgres;
 
 --
--- TOC entry 3395 (class 0 OID 0)
+-- TOC entry 3397 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: xopat_annotations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -299,9 +299,9 @@ ALTER SEQUENCE public.xopat_annotations_id_seq OWNED BY public.xopat_annotations
 --
 
 CREATE TABLE public.xopat_session (
-                                      user_id integer NOT NULL,
-                                      file_id integer NOT NULL,
-                                      session text
+    user_id integer NOT NULL,
+    file_id integer NOT NULL,
+    session text
 );
 
 
@@ -364,6 +364,15 @@ ALTER TABLE ONLY public.files
 
 ALTER TABLE ONLY public.seen_files
     ADD CONSTRAINT seen_files_user_id_file_id_key UNIQUE (user_id, file_id);
+
+
+--
+-- TOC entry 3234 (class 2606 OID 16513)
+-- Name: xopat_session ufuni; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.xopat_session
+    ADD CONSTRAINT ufuni UNIQUE (user_id, file_id);
 
 
 --
@@ -508,7 +517,7 @@ CREATE INDEX fki_x ON public.xopat_annotation_data USING btree (annotation_id);
 
 
 --
--- TOC entry 3233 (class 1259 OID 16456)
+-- TOC entry 3235 (class 1259 OID 16456)
 -- Name: user; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -516,7 +525,7 @@ CREATE INDEX "user" ON public.xopat_session USING btree (user_id);
 
 
 --
--- TOC entry 3235 (class 2606 OID 16457)
+-- TOC entry 3237 (class 2606 OID 16457)
 -- Name: auth access_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -525,7 +534,7 @@ ALTER TABLE ONLY public.auth
 
 
 --
--- TOC entry 3239 (class 2606 OID 16462)
+-- TOC entry 3241 (class 2606 OID 16462)
 -- Name: xopat_annotation_data aia; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -534,7 +543,7 @@ ALTER TABLE ONLY public.xopat_annotation_data
 
 
 --
--- TOC entry 3240 (class 2606 OID 16467)
+-- TOC entry 3242 (class 2606 OID 16467)
 -- Name: xopat_annotations aif; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -543,7 +552,7 @@ ALTER TABLE ONLY public.xopat_annotations
 
 
 --
--- TOC entry 3241 (class 2606 OID 16472)
+-- TOC entry 3243 (class 2606 OID 16472)
 -- Name: xopat_annotations aiu; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -552,7 +561,7 @@ ALTER TABLE ONLY public.xopat_annotations
 
 
 --
--- TOC entry 3234 (class 2606 OID 16477)
+-- TOC entry 3236 (class 2606 OID 16477)
 -- Name: access fci; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -561,7 +570,7 @@ ALTER TABLE ONLY public.access
 
 
 --
--- TOC entry 3242 (class 2606 OID 16482)
+-- TOC entry 3244 (class 2606 OID 16482)
 -- Name: xopat_session fsi; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -570,7 +579,7 @@ ALTER TABLE ONLY public.xopat_session
 
 
 --
--- TOC entry 3236 (class 2606 OID 16487)
+-- TOC entry 3238 (class 2606 OID 16487)
 -- Name: file_events fsin; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -579,7 +588,7 @@ ALTER TABLE ONLY public.file_events
 
 
 --
--- TOC entry 3237 (class 2606 OID 16492)
+-- TOC entry 3239 (class 2606 OID 16492)
 -- Name: seen_files inf; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -588,7 +597,7 @@ ALTER TABLE ONLY public.seen_files
 
 
 --
--- TOC entry 3238 (class 2606 OID 16497)
+-- TOC entry 3240 (class 2606 OID 16497)
 -- Name: seen_files uin; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -597,7 +606,7 @@ ALTER TABLE ONLY public.seen_files
 
 
 --
--- TOC entry 3243 (class 2606 OID 16502)
+-- TOC entry 3245 (class 2606 OID 16502)
 -- Name: xopat_session usi; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -606,7 +615,7 @@ ALTER TABLE ONLY public.xopat_session
 
 
 --
--- TOC entry 3389 (class 0 OID 0)
+-- TOC entry 3391 (class 0 OID 0)
 -- Dependencies: 5
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -615,7 +624,7 @@ REVOKE USAGE ON SCHEMA public FROM PUBLIC;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2023-03-21 20:30:54
+-- Completed on 2023-03-25 16:23:04
 
 --
 -- PostgreSQL database dump complete
