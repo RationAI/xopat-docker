@@ -1,5 +1,3 @@
-DirectoryIndex index.php
-
 # Allows specific URLs, we allow 'health'
 <If "%{THE_REQUEST} =~ m#^GET /health/#">
     Allow from All

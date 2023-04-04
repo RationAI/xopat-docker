@@ -13,6 +13,7 @@ RUN apt-get update -y && apt-get install -y \
         curl \
         wget \
         libvips-tools \
+        tini \
         # HTTP Server
         apache2 \
         # PHP Apps
@@ -55,8 +56,11 @@ RUN phpenmod pdo_pgsql \
 
 COPY config.php /var/www/html/importer/server/config.php
 COPY xo_config.php /var/www/html/xo_db/config.php
+# Our internal use-case: health url that returns 200
+COPY .htaccess /var/www/html/.htaccess
+COPY health /var/www/html/health
 
 EXPOSE 8081
-CMD ["system","apache2","reload"]
-CMD ["apache2ctl","-D","FOREGROUND"]
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["apache2ctl", "-D", "FOREGROUND"]
 USER www-data

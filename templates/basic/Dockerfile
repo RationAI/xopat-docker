@@ -150,11 +150,13 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
 # Overwrites / extends on files cloned, needs to run after git clone
 COPY client/browser/config.php /var/www/html/browser/config.php
 COPY index.php /var/www/html/index.php
-COPY .htaccess /var/www/html/.htaccess
 COPY client/xopat/env.json /var/www/html/xopat/env/env.json
 COPY client/xo_config.php /var/www/html/xo_db/config.php
 COPY --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/xopat/openseadragon/build/openseadragon/
 COPY --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/xopat/openseadragon/build/openseadragon/
+# Our internal use-case: health url that returns 200
+COPY .htaccess /var/www/html/.htaccess
+COPY health /var/www/html/health
 
 EXPOSE 8080-9000
 USER www-data
