@@ -29,7 +29,6 @@ services:
       - ./data/:/var/www/data/:rwx
     ports:
       - "8080:8080"
-      - "9000:9000"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     depends_on:

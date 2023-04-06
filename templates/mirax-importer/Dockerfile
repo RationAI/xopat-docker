@@ -91,4 +91,5 @@ ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["apache2ctl", "-D", "FOREGROUND"]
 USER www-data
 
-RUN micromamba create -n mirax_venv python=3.7 snakemake openslide-python -c conda-forge -c bioconda 
+RUN micromamba create -n snakemake snakemake -c conda-forge -c bioconda \
+    && micromamba create -n mirax_venv python=3.7 openslide-python -c conda-forge

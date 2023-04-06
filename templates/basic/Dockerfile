@@ -157,6 +157,6 @@ COPY --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/xopat/ope
 COPY .htaccess /var/www/html/.htaccess
 COPY health /var/www/html/health
 
-EXPOSE 8080-9000
+EXPOSE 8080
 USER www-data
 ENTRYPOINT ["/usr/bin/s6-svscan","/run/s6"]
