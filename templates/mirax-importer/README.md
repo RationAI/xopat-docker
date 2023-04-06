@@ -18,3 +18,12 @@ for which you set up write access.
 
 Access the running container as
 > `docker exec -it mirax_importer bash`
+
+### Tools used
+The importer is a very usecase-specific deployment that integrates
+various tools necessary for MIRAX loading and processing such as 
+`vips`, `snakemake`, `python`, `php`, uses `mirax_venv` virtual
+environment and overall might not be what you are looking for.
+It is not recommended using AS-IS, it's something we use
+for very basic MIRAX files management and processing and
+it is very specific to our use-case.

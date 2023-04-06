@@ -1,4 +1,3 @@
-# Step 0: Library Image
 # Step 1: Build IIPImage Server, OpenSeadragon from sources
 FROM ubuntu:20.04 AS build
 
@@ -29,7 +28,7 @@ RUN apt update && apt install -y \
         libjsoncpp-dev \
         libvips-dev \
         libpqxx-dev \
-        cmake \
+        cmake make \
 
         --fix-missing \
     && apt clean \
@@ -137,11 +136,11 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     && chmod a+x /var/www/localhost/fcgi-bin/iipsrv.fcgi \
 
     #Client
-    && mkdir /var/www/html/browser && git clone  $BROWSER /var/www/html/browser \
-    && mkdir /var/www/html/xopat && git clone  $VIEWER /var/www/html/xopat \
+    && mkdir /var/www/html/browser && git clone $BROWSER /var/www/html/browser \
+    && mkdir /var/www/html/xopat && git clone $VIEWER /var/www/html/xopat \
     #for dev branch: 
     #&& cd /var/www/html/xopat && git checkout development && cd /usr/app \
-    && mkdir /var/www/html/xo_db && git clone  $DB_PROXY /var/www/html/xo_db \
+    && mkdir /var/www/html/xo_db && git clone $DB_PROXY /var/www/html/xo_db \
     && mkdir -p /var/www/html/xopat/openseadragon/build/openseadragon \
     && mkdir -p /var/www/data \
     && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /var/www/data \
@@ -161,4 +160,3 @@ COPY health /var/www/html/health
 EXPOSE 8080-9000
 USER www-data
 ENTRYPOINT ["/usr/bin/s6-svscan","/run/s6"]
-CMD []

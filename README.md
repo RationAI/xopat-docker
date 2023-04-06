@@ -33,7 +33,7 @@ When updating, simply use
 > `git pull && docker compose build`
 
 ## Configuring the build
-You can adjust some values - passwords, access - through environmental variables in the docker compose file.
+You can adjust some values - passwords, domains - through environmental variables in the docker compose file.
 
 ## Entering containers
 Containers are named, so in order to execute a code inside the container you can use its name. For the
