@@ -11,7 +11,7 @@ ENV PATH      $NVM_DIR/versions/node/v$NODE_VERSION/bin:$PATH
 WORKDIR /usr/app
 
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt update && apt install -y \
+RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -y \
 
         # Cloning Deps
         git \
@@ -29,8 +29,6 @@ RUN apt update && apt install -y \
         libvips-dev \
         libpqxx-dev \
         cmake make \
-
-        --fix-missing \
     && apt clean \
     && rm -rf /var/lib/apt/lists/* \
 
@@ -79,7 +77,7 @@ ENV VIEWER https://github.com/RationAI/xopat.git
 ENV DB_PROXY https://github.com/RationAI/xo_db
 
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -y \
         # Cloning Deps
         git \
         apt-transport-https \
@@ -103,39 +101,29 @@ RUN apt-get update -y && apt-get install -y \
         libjpeg-dev \
         libvips \
         memcached \
-
-        --fix-missing \
     && apt clean \
-    && rm -rf /var/lib/apt/lists/* \
-    && a2enmod rewrite headers expires ext_filter
+    && rm -rf /var/lib/apt/lists/* 
 
 WORKDIR /usr/app
-# Did not work unless we forward arg from compose.yml to env
-ARG XO_BASIC_PWD
-ARG XO_BASIC_USER
 
 # Server-related files that are better to copy before changing access rights etc.
 COPY ports.conf .
-COPY apache.conf /etc/apache2/sites-available/000-default.conf
 COPY --from=build /usr/app/server/src/iipsrv.fcgi /var/www/localhost/fcgi-bin/
 COPY /s6 /run/s6
 
     # General
 RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     && phpenmod pdo_pgsql \
-    #For reverse proxy, enable
-    # && a2enmod proxy proxy_http \
-    #Auth: if user not set   #just create some file so apache is happy, will not be used              #or make desired auth
-    && a2enmod env dir rewrite && mkdir -p /usr/local/etc/apache/ && touch /etc/apache2/.env.apache \
-    && [ -z $XO_BASIC_USER ] && (htpasswd -bc /usr/local/etc/apache/.htpasswd 'www-data' '123456789') || (htpasswd -bc /usr/local/etc/apache/.htpasswd $XO_BASIC_USER "$XO_BASIC_PWD" && echo "SetEnv XO_BASIC_AUTH 5" >> /etc/apache2/.env.apache) \
-
-    #IIPServer
+    #for reverse proxy, enable: && a2enmod proxy proxy_http \
+    # Auth: enable modules, prepare files/dirs
+    && a2enmod rewrite headers expires ext_filter env dir \
+    && touch /etc/apache2/.env.apache && mkdir -p /usr/local/etc/apache/ && touch /usr/local/etc/apache/.htpasswd \
+    # IIPServer
     && touch /var/log/iipsrv.log \
     && chmod 666 /var/log/iipsrv.log \
     && chown www-data:www-data /var/www/localhost/fcgi-bin/iipsrv.fcgi \
     && chmod a+x /var/www/localhost/fcgi-bin/iipsrv.fcgi \
-
-    #Client
+    # Client
     && mkdir /var/www/html/browser && git clone $BROWSER /var/www/html/browser \
     && mkdir /var/www/html/xopat && git clone $VIEWER /var/www/html/xopat \
     #for dev branch: 
@@ -143,9 +131,10 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     && mkdir /var/www/html/xo_db && git clone $DB_PROXY /var/www/html/xo_db \
     && mkdir -p /var/www/html/xopat/openseadragon/build/openseadragon \
     && mkdir -p /var/www/data \
-    && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /var/www/data \
+    && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /usr/local/etc/apache/.htpasswd /etc/apache2/.env.apache \
     && chmod --recursive 777 /var/run /var/www/data 
- 
+
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
 # Overwrites / extends on files cloned, needs to run after git clone
 COPY client/browser/config.php /var/www/html/browser/config.php
 COPY index.php /var/www/html/index.php
