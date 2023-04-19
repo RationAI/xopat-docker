@@ -13,8 +13,9 @@ RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -
         curl \
         wget \
         libvips-tools \
+        python3-pip \
+        gcc \
         tini \
-        bzip2 \
         # HTTP Server
         apache2 \
         # PHP Apps
@@ -33,16 +34,8 @@ WORKDIR /usr/app
 # Todo problem if php version upgrades in image, the version installed is 8.1 and path will change :/
 COPY php.ini /etc/php/8.1/apache2/conf.d/uploads.ini
 
-# Micromamba does not work with 'sh'
-SHELL ["/bin/bash", "-c"]
-
     # General
-RUN wget -qO- https://micromamba.snakepit.net/api/micromamba/linux-64/latest | tar -xjv bin/micromamba  \
-    && mv bin/micromamba /usr/bin/micromamba && rm -r bin \
-    && touch /root/.bashrc \
-    && micromamba shell init -s bash -p /var/www/micromamba  \
-    #problems on ubuntu
-    && grep -v '[ -z "\$PS1" ] && return' /root/.bashrc > /var/www/.bashrc \
+RUN pip install kubernetes randomname pyyaml openslide-python \
     && phpenmod pdo_pgsql \
     # Auth: enable modules, prepare files/dirs
     && a2enmod rewrite headers expires ext_filter env dir \
@@ -64,9 +57,8 @@ COPY .htaccess /var/www/html/.htaccess
 COPY health /var/www/html/health
 
 EXPOSE 8081
-ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD /var/www/docker-entrypoint.sh
+
 USER www-data
 
-RUN micromamba create -n snakemake snakemake -c conda-forge -c bioconda \
-    && micromamba create -n mirax_venv python=3.7 openslide-python -c conda-forge
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD /var/www/docker-entrypoint.sh
