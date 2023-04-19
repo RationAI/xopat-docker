@@ -149,7 +149,4 @@ COPY health /var/www/html/health
 EXPOSE 8080
 USER www-data
 
-ENV HTTP_PROXY "http://proxy.ics.muni.cz:3128"
-ENV HTTPS_PROXY "http://proxy.ics.muni.cz:3128"
-
 ENTRYPOINT ["/usr/bin/s6-svscan","/run/s6"]
