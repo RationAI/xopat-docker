@@ -13,6 +13,7 @@ RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -
         curl \
         wget \
         libvips-tools \
+        python3-dev \
         python3-pip \
         gcc \
         tini \
