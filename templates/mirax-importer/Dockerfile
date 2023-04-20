@@ -17,6 +17,8 @@ RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -
         python3-pip \
         gcc \
         tini \
+        vim \
+        nano \
         # HTTP Server
         apache2 \
         # PHP Apps
