@@ -12,14 +12,12 @@ WORKDIR /usr/app
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -y \
-
         # Cloning Deps
         git \
         apt-transport-https \
         ca-certificates \
         curl \
         wget \
-
         # CPP Tools (Server only) todo remove libpqxx
         g++ \
         autoconf \
@@ -40,7 +38,6 @@ RUN mkdir minizip-ng \
     && cmake --build build \
     && cp build/libminizip.a libminizip-ng.a \
     && cd .. \
-
     # Build Image Server File: /usr/app/server/src/iipsrv.fcgi
     && mkdir server && cd server \
     && git clone $IIPSERVER . \
@@ -52,7 +49,6 @@ RUN mkdir minizip-ng \
        CPPFLAGS="-I../../minizip-ng" \
     && make \
     && cd .. \
-
     # Install NVM https://stackoverflow.com/questions/25899912/how-to-install-nvm-in-docker
     && rm /bin/sh && ln -s /bin/bash /bin/sh \
     && mkdir $NVM_DIR \
@@ -117,7 +113,8 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     #for reverse proxy, enable: && a2enmod proxy proxy_http \
     # Auth: enable modules, prepare files/dirs
     && a2enmod rewrite headers expires ext_filter env dir \
-    && touch /etc/apache2/.env.apache && mkdir -p /usr/local/etc/apache/ && touch /usr/local/etc/apache/.htpasswd \
+    && mkdir -p /usr/local/etc/apache \
+    && touch /etc/apache2/.env.apache \
     # IIPServer
     && touch /var/log/iipsrv.log \
     && chmod 666 /var/log/iipsrv.log \
@@ -131,7 +128,7 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     && mkdir /var/www/html/xo_db && git clone $DB_PROXY /var/www/html/xo_db \
     && mkdir -p /var/www/html/xopat/openseadragon/build/openseadragon \
     && mkdir -p /var/www/data \
-    && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /usr/local/etc/apache/.htpasswd /etc/apache2/.env.apache \
+    && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /etc/apache2/.env.apache \
     && chmod --recursive 777 /var/run /var/www/data 
 
 COPY apache.conf /etc/apache2/sites-available/000-default.conf
