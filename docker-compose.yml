@@ -51,6 +51,7 @@ services:
       XO_DB_USER: postgres
       XO_DB_PASS: 123456789
       XO_DB_NAME: postgresDB
+      XO_MIRAX_SERVER_URL: http://localhost:8081/importer/server/
     restart: always
     volumes:
       - ./data/:/var/www/data/:rwx

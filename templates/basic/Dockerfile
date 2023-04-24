@@ -18,8 +18,6 @@ RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -
         ca-certificates \
         curl \
         wget \
-        vim \
-        nano \
         # CPP Tools (Server only) todo remove libpqxx
         g++ \
         autoconf \
@@ -83,6 +81,8 @@ RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -
         curl \
         wget \
         s6 \
+        vim \
+        nano \
         # HTTP Server
         apache2 \
         # PHP Apps
