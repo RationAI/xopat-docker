@@ -51,14 +51,14 @@ RUN pip install kubernetes randomname pyyaml openslide-python \
     && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /etc/apache2/.env.apache \
     && chmod --recursive 777 /var/run /var/www/data /var/www/html/importer/server
 
-COPY apache.conf /etc/apache2/sites-available/000-default.conf
-COPY config.php /var/www/html/importer/server/config.php
-COPY xo_config.php /var/www/html/xo_db/config.php
-COPY index.php /var/www/html/index.php
-COPY docker-entrypoint.sh /var/www/docker-entrypoint.sh
+COPY --chown=www-data:www-data apache.conf /etc/apache2/sites-available/000-default.conf
+COPY --chown=www-data:www-data config.php /var/www/html/importer/server/config.php
+COPY --chown=www-data:www-data xo_config.php /var/www/html/xo_db/config.php
+COPY --chown=www-data:www-data index.php /var/www/html/index.php
+COPY --chown=www-data:www-data docker-entrypoint.sh /var/www/docker-entrypoint.sh
 # Our internal use-case: health url that returns 200
-COPY .htaccess /var/www/html/.htaccess
-COPY health /var/www/html/health
+COPY --chown=www-data:www-data .htaccess /var/www/html/.htaccess
+COPY --chown=www-data:www-data health /var/www/html/health
 
 EXPOSE 8081
 

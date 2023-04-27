@@ -133,17 +133,17 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /etc/apache2/.env.apache \
     && chmod --recursive 777 /var/run /var/www/data 
 
-COPY apache.conf /etc/apache2/sites-available/000-default.conf
+COPY --chown=www-data:www-data apache.conf /etc/apache2/sites-available/000-default.conf
 # Overwrites / extends on files cloned, needs to run after git clone
-COPY client/browser/config.php /var/www/html/browser/config.php
-COPY index.php /var/www/html/index.php
-COPY client/xopat/env.json /var/www/html/xopat/env/env.json
-COPY client/xo_config.php /var/www/html/xo_db/config.php
-COPY --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/xopat/openseadragon/build/openseadragon/
-COPY --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/xopat/openseadragon/build/openseadragon/
+COPY --chown=www-data:www-data client/browser/config.php /var/www/html/browser/config.php
+COPY --chown=www-data:www-data index.php /var/www/html/index.php
+COPY --chown=www-data:www-data client/xopat/env.json /var/www/html/xopat/env/env.json
+COPY --chown=www-data:www-data client/xo_config.php /var/www/html/xo_db/config.php
+COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/xopat/openseadragon/build/openseadragon/
+COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/xopat/openseadragon/build/openseadragon/
 # Our internal use-case: health url that returns 200
-COPY .htaccess /var/www/html/.htaccess
-COPY health /var/www/html/health
+COPY --chown=www-data:www-data .htaccess /var/www/html/.htaccess
+COPY --chown=www-data:www-data health /var/www/html/health
 
 EXPOSE 8080
 USER www-data
