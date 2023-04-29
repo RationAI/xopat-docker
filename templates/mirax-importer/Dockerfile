@@ -2,6 +2,7 @@
 FROM ubuntu:jammy AS importer
 
 ENV IMPORTER https://github.com/RationAI/mirax-importer
+ENV IMPORTER_BRANCH kubernetes
 ENV DB_PROXY https://github.com/RationAI/xo_db
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -46,14 +47,12 @@ RUN pip install kubernetes randomname pyyaml openslide-python \
     && mkdir -p /usr/local/etc/apache \
     # Client
     && mkdir /var/www/html/xo_db && git clone $DB_PROXY /var/www/html/xo_db \
-    && mkdir /var/www/html/importer && git clone $IMPORTER /var/www/html/importer \
+    && mkdir /var/www/html/importer && git clone --single-branch --branch $IMPORTER_BRANCH $IMPORTER /var/www/html/importer \
     && mkdir -p /var/www/data \
     && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /etc/apache2/.env.apache \
     && chmod --recursive 777 /var/run /var/www/data /var/www/html/importer/server
 
 COPY --chown=www-data:www-data apache.conf /etc/apache2/sites-available/000-default.conf
-COPY --chown=www-data:www-data config.php /var/www/html/importer/server/config.php
-COPY --chown=www-data:www-data xo_config.php /var/www/html/xo_db/config.php
 COPY --chown=www-data:www-data index.php /var/www/html/index.php
 COPY --chown=www-data:www-data docker-entrypoint.sh /var/www/docker-entrypoint.sh
 # Our internal use-case: health url that returns 200

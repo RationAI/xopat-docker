@@ -69,7 +69,9 @@ RUN mkdir minizip-ng \
 FROM ubuntu:jammy AS viewer
 
 ENV BROWSER https://github.com/RationAI/browser.git
+ENV BROWSER_BRANCH kubernetes
 ENV VIEWER https://github.com/RationAI/xopat.git
+ENV VIEWER_BRANCH kubernetes
 ENV DB_PROXY https://github.com/RationAI/xo_db
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -123,8 +125,8 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     && chown www-data:www-data /var/www/localhost/fcgi-bin/iipsrv.fcgi \
     && chmod a+x /var/www/localhost/fcgi-bin/iipsrv.fcgi \
     # Client
-    && mkdir /var/www/html/browser && git clone $BROWSER /var/www/html/browser \
-    && mkdir /var/www/html/xopat && git clone $VIEWER /var/www/html/xopat \
+    && mkdir /var/www/html/browser && git clone --single-branch --branch $BROWSER_BRANCH $BROWSER /var/www/html/browser \
+    && mkdir /var/www/html/xopat && git clone --single-branch --branch $VIEWER_BRANCH $VIEWER /var/www/html/xopat \
     #for dev branch: 
     #&& cd /var/www/html/xopat && git checkout development && cd /usr/app \
     && mkdir /var/www/html/xo_db && git clone $DB_PROXY /var/www/html/xo_db \
@@ -134,13 +136,15 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     && chmod --recursive 777 /var/run /var/www/data 
 
 COPY --chown=www-data:www-data apache.conf /etc/apache2/sites-available/000-default.conf
-# Overwrites / extends on files cloned, needs to run after git clone
-COPY --chown=www-data:www-data client/browser/config.php /var/www/html/browser/config.php
+
+# Xopat kubernetes branch configures OSD sources as /var/www/html/openseadragon/
+COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/images /var/www/html/openseadragon/images
+COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/openseadragon/
+COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/openseadragon/
+
+# Index to browser
 COPY --chown=www-data:www-data index.php /var/www/html/index.php
-COPY --chown=www-data:www-data client/xopat/env.json /var/www/html/xopat/env/env.json
-COPY --chown=www-data:www-data client/xo_config.php /var/www/html/xo_db/config.php
-COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/xopat/openseadragon/build/openseadragon/
-COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/xopat/openseadragon/build/openseadragon/
+
 # Our internal use-case: health url that returns 200
 COPY --chown=www-data:www-data .htaccess /var/www/html/.htaccess
 COPY --chown=www-data:www-data health /var/www/html/health

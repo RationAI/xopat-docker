@@ -2,5 +2,5 @@
 
 //Move this file anywhere you like, just specify relative path to the root.
 define('PATH_TO_IS_MANAGER', 'browser/');
-define('FM_CONFIG', PATH_TO_IS_MANAGER . 'config.php');
+define('FM_CONFIG', PATH_TO_IS_MANAGER . 'config.php'); //in the same directory
 require_once PATH_TO_IS_MANAGER . 'index.php';
