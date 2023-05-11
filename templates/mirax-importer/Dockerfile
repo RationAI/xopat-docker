@@ -35,9 +35,6 @@ RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -
 
 WORKDIR /usr/app
 
-# Todo problem if php version upgrades in image, the version installed is 8.1 and path will change :/
-COPY php.ini /etc/php/8.1/apache2/conf.d/uploads.ini
-
     # General
 RUN pip install kubernetes randomname pyyaml openslide-python \
     && phpenmod pdo_pgsql \
@@ -50,8 +47,10 @@ RUN pip install kubernetes randomname pyyaml openslide-python \
     && mkdir /var/www/html/importer && git clone --single-branch --branch $IMPORTER_BRANCH $IMPORTER /var/www/html/importer \
     && mkdir -p /var/www/data \
     && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /etc/apache2/.env.apache \
-    && chmod --recursive 777 /var/run /var/www/data /var/www/html/importer/server
+    && chmod --recursive 777 /var/run /var/www/data
 
+# Todo problem if php version upgrades in image, the version installed is 8.1 and path will change :/
+COPY php.ini /etc/php/8.1/apache2/conf.d/uploads.ini
 COPY --chown=www-data:www-data apache.conf /etc/apache2/sites-available/000-default.conf
 COPY --chown=www-data:www-data index.php /var/www/html/index.php
 COPY --chown=www-data:www-data docker-entrypoint.sh /var/www/docker-entrypoint.sh

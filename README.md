@@ -20,6 +20,10 @@ The following command stream supposes that you have git and docker compose insta
  docker compose build
  docker compose up  
 ```
+
+> Recommended way of building is to set ``DOCKER_BUILDKIT=0`` env variable to prevent docker from
+> messing up the build process. For windows, use `set DOCKER_BUILDKIT=0`.
+
 Before running the viewer (by default, the address is `http://localhost:8080`), put some [data](https://iipimage.sourceforge.io/documentation/images/)
 inside the `./data/` folder to view. Note that some elements might require write rights to this folder, so before running the system you
 can run `mkdir data && chmod a+rwx data`. Based on your scenarios you can adjust the rights, but you should make sure `www-data` user inside

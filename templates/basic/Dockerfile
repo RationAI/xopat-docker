@@ -68,12 +68,6 @@ RUN mkdir minizip-ng \
 # Step 2: Run Docker. Do not use debian-based images: libjpeg8 not available!
 FROM ubuntu:jammy AS viewer
 
-ENV BROWSER https://github.com/RationAI/browser.git
-ENV BROWSER_BRANCH kubernetes
-ENV VIEWER https://github.com/RationAI/xopat.git
-ENV VIEWER_BRANCH kubernetes
-ENV DB_PROXY https://github.com/RationAI/xo_db
-
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -y \
         # Cloning Deps
@@ -106,10 +100,17 @@ RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -
 
 WORKDIR /usr/app
 
-# Server-related files that are better to copy before changing access rights etc.
-COPY ports.conf .
-COPY --from=build /usr/app/server/src/iipsrv.fcgi /var/www/localhost/fcgi-bin/
-COPY /s6 /run/s6
+ENV BROWSER https://github.com/RationAI/browser.git
+ENV BROWSER_BRANCH kubernetes
+ENV VIEWER https://github.com/RationAI/xopat.git
+ENV VIEWER_BRANCH kubernetes
+ENV DB_PROXY https://github.com/RationAI/xo_db
+
+COPY --chown=www-data:www-data ports.conf .
+COPY --chown=www-data:www-data /s6 /run/s6
+COPY --chown=www-data:www-data apache.conf /etc/apache2/sites-available/000-default.conf
+# IIPImage server
+COPY --chown=www-data:www-data --from=build /usr/app/server/src/iipsrv.fcgi /var/www/localhost/fcgi-bin/
 
     # General
 RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
@@ -127,24 +128,18 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     # Client
     && mkdir /var/www/html/browser && git clone --single-branch --branch $BROWSER_BRANCH $BROWSER /var/www/html/browser \
     && mkdir /var/www/html/xopat && git clone --single-branch --branch $VIEWER_BRANCH $VIEWER /var/www/html/xopat \
-    #for dev branch: 
-    #&& cd /var/www/html/xopat && git checkout development && cd /usr/app \
     && mkdir /var/www/html/xo_db && git clone $DB_PROXY /var/www/html/xo_db \
-    && mkdir -p /var/www/html/xopat/openseadragon/build/openseadragon \
     && mkdir -p /var/www/data \
     && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /etc/apache2/.env.apache \
     && chmod --recursive 777 /var/run /var/www/data 
 
-COPY --chown=www-data:www-data apache.conf /etc/apache2/sites-available/000-default.conf
 
 # Xopat kubernetes branch configures OSD sources as /var/www/html/openseadragon/
 COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/images /var/www/html/openseadragon/images
 COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/openseadragon/
 COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/openseadragon/
-
 # Index to browser
 COPY --chown=www-data:www-data index.php /var/www/html/index.php
-
 # Our internal use-case: health url that returns 200
 COPY --chown=www-data:www-data .htaccess /var/www/html/.htaccess
 COPY --chown=www-data:www-data health /var/www/html/health
