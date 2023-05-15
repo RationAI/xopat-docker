@@ -106,11 +106,10 @@ ENV VIEWER https://github.com/RationAI/xopat.git
 ENV VIEWER_BRANCH kubernetes
 ENV DB_PROXY https://github.com/RationAI/xo_db
 
-COPY --chown=www-data:www-data ports.conf .
-COPY --chown=www-data:www-data /s6 /run/s6
-COPY --chown=www-data:www-data apache.conf /etc/apache2/sites-available/000-default.conf
-# IIPImage server
-COPY --chown=www-data:www-data --from=build /usr/app/server/src/iipsrv.fcgi /var/www/localhost/fcgi-bin/
+# Server-related files that are better to copy before changing access rights etc.
+COPY ports.conf .
+COPY --from=build /usr/app/server/src/iipsrv.fcgi /var/www/localhost/fcgi-bin/
+COPY /s6 /run/s6
 
     # General
 RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
@@ -133,13 +132,13 @@ RUN cat /usr/app/ports.conf >> /etc/apache2/ports.conf \
     && chown -R www-data:www-data /var/lock /var/log /var/www /var/run /run/lock /etc/apache2/.env.apache \
     && chmod --recursive 777 /var/run /var/www/data 
 
-
-# Xopat kubernetes branch configures OSD sources as /var/www/html/openseadragon/
-COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/images /var/www/html/openseadragon/images
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
+# Overwrites / extends on files cloned, needs to run after git clone
+COPY --chown=www-data:www-data index.php /var/www/html/index.php
 COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/*.js /var/www/html/openseadragon/
 COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/*.map /var/www/html/openseadragon/
-# Index to browser
-COPY --chown=www-data:www-data index.php /var/www/html/index.php
+COPY --chown=www-data:www-data --from=build /usr/app/osd/build/openseadragon/images /var/www/html/openseadragon/images
+
 # Our internal use-case: health url that returns 200
 COPY --chown=www-data:www-data .htaccess /var/www/html/.htaccess
 COPY --chown=www-data:www-data health /var/www/html/health
