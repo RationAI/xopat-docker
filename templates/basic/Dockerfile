@@ -32,7 +32,7 @@ RUN apt-get update -y && apt-get install --no-install-recommends --fix-missing -
 
     # Minizip-ng todo proxy repo
 RUN mkdir minizip-ng \
-    && git clone https://github.com/zlib-ng/minizip-ng.git minizip-ng \
+    && git clone -b '3.0.10' --single-branch https://github.com/zlib-ng/minizip-ng.git minizip-ng \
     && cd minizip-ng \
     && cmake -S . -B build -DMZ_COMPRESS_ONLY=ON -DMZ_BZIP2=OFF -DMZ_LZMA=OFF -DMZ_ZSTD=OFF -DMZ_LIBCOMP=OFF -DMZ_FETCH_LIBS=ON -DMZ_ZLIB=OFF -DMZ_OPENSSL=OFF \
     && cmake --build build \
