@@ -1,5 +1,13 @@
 # XOpat Docker
 
+> [!CAUTION]
+> We are currently unable to maintain compatibility of this deployment example. We are preparing advanced architecture, viewer features and deployment options. You might experience problems with OpenSeadragon where we work on v5.0 release and current master branch
+> https://github.com/RationAI/openseadragon is too new for the xOpat master branch.
+> If you experience any problems please feel free to get in touch with us. We hope to present much more advanced or simpler infrastructure deployment examples.
+> 
+
+------------------
+
 You can find prepared docker-composite for various scenarios. The main idea is to be able to run individual components locally or connect them to various online service endpoints / REST API connectors. The basic docker image (compose) uses a basic scenario: local client and image server, other folders add other containers 
 with abilities to the system.
 
